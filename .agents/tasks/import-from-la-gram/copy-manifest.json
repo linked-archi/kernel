@@ -1,0 +1,25 @@
+{
+  "source": "tools/modellers/la-gram",
+  "branch": "basic-interaction",
+  "copied": "2026-11-20",
+  "files": 413,
+  "adapted": [
+    "src/rdf-engine/__tests__/turtle-writer.test.ts"
+  ],
+  "left_in_la_gram": [
+    "src/metamodel-manager/__tests__/basic-metamodel.test.ts",
+    "src/metamodel-manager/__tests__/catalogue.test.ts",
+    "src/metamodel-manager/__tests__/palette-snapshot.test.ts",
+    "src/model-manager/__tests__/folders.test.ts",
+    "src/model-manager/__tests__/iri-conformance.test.ts",
+    "src/model-manager/__tests__/model-contents-index.test.ts",
+    "src/model-manager/__tests__/property-catalog.test.ts",
+    "src/model-manager/__tests__/provenance.test.ts",
+    "src/model-manager/__tests__/questions.test.ts",
+    "src/model-manager/__tests__/rdf-scope.test.ts",
+    "src/model-manager/__tests__/relationship-lookup-memo.test.ts",
+    "src/model-manager/__tests__/relationship-ranking.test.ts",
+    "src/model-manager/__tests__/relationship-validity.test.ts",
+    "src/rdf-engine/__tests__/validation-engine.test.ts"
+  ]
+}

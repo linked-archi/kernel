@@ -287,10 +287,9 @@ describe('the n3 version the writer overrides', () => {
     // changed it: check the override against it, then move N3_VERSION and both package.json files together.
     const installed = (createRequire(import.meta.url)('n3/package.json') as { version: string }).version;
     expect(installed).toBe(N3_VERSION);
+    // The kernel pins n3 in its own package.json; la-gram's own pins are checked in la-gram (K01).
     const la = JSON.parse(readFileSync(join(ROOT, 'package.json'), 'utf8')) as { dependencies: Record<string, string> };
-    const cli = JSON.parse(readFileSync(join(ROOT, 'packages/la-gram-git/package.json'), 'utf8')) as { dependencies: Record<string, string> };
     expect(la.dependencies['n3']).toBe(N3_VERSION);
-    expect(cli.dependencies['n3']).toBe(N3_VERSION);
   });
 
   it('calls the override for subjects, predicates, objects, graphs and datatypes', () => {

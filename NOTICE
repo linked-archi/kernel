@@ -1,0 +1,11 @@
+linked-archi-kernel
+Copyright 2026 Linked.Archi
+
+This product is licensed under the Apache License, Version 2.0 (see LICENSE).
+
+Its source started as la-gram's rdf-engine, metamodel-manager and model-manager modules and its model
+reader and writer (model-io), by the same authors and under the same licence.
+
+The metamodel files under assets/ are copies of Linked.Archi's published definitions
+(https://meta.linked.archi/), each under the licence it states: Creative Commons Attribution 4.0 for
+most, Attribution-ShareAlike for a few.

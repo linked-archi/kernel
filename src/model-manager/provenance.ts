@@ -8,21 +8,18 @@
  *   the view or the element it is part of; every change is one to the model too. A value set by hand in the
  *   same edit stays.
  * - **In the provenance graph** (`{ns}graph/provenance` when saved): the concept's `prov:wasGeneratedBy`, the
- *   editing activity that last changed it, and `prov:generatedAtTime`; the activity — one user's edits in
+ *   editing activity that last changed it, and `prov:generatedAtTime`; the activity — one person's edits in
  *   one la-gram, from the first change after the model is opened or saved to the next save — with its start
- *   and end, `prov:wasAssociatedWith` la-gram at its version and the user; la-gram, a
- *   `prov:SoftwareAgent`; the user, a `prov:Person` with their name, email address and Git account
- *   (`schema:sameAs` its page, `schema:alternateName` its username) as far as la-gram knows them.
+ *   and end, `prov:wasAssociatedWith` la-gram at its version and the person; la-gram, a
+ *   `prov:SoftwareAgent`; the person, a `prov:Person`.
  *
- * Minimal on purpose: four statements a concept, five an activity, la-gram and each user once. An activity
- * no concept names any more is removed in the edit that leaves it unnamed, and so is a user or a la-gram
+ * Minimal on purpose: four statements a concept, five an activity, la-gram and each person once. An activity
+ * no concept names any more is removed in the edit that leaves it unnamed, and so is a person or a la-gram
  * version no activity names. What exactly changed in a concept is what checkpoints and Git compare.
  *
- * The activities and the users are named in the model's namespace, `{ns}provenance/edit-{id}` and
- * `{ns}provenance/user-{id}` (meta's *IRI Minting*, *Provenance of edits*): the word is for a person reading
- * the Turtle, the id is opaque — an activity's a random UUID, a user's the digest of their Git account's page,
- * else of their email address, else of their name, so that the IRI carries nothing personal and one user is
- * one resource on every machine. la-gram at a version is an IRI of its own, the same in every model:
+ * The activities and the people are named in the model's namespace, `{ns}provenance/{id}`, opaque (meta's
+ * *IRI Minting*, *Provenance of edits*): an activity by a random UUID, a person by the digest of their email
+ * address, else of their name. la-gram at a version is an IRI of its own, the same in every model:
  * {@link modellerIri}, the page of that version.
  *
  * What is not an edit is not stamped: opening, importing, merging, restoring a version, moving the model to
@@ -69,8 +66,6 @@ export const PROVENANCE_TERMS = {
   softwareApplication: SCHEMA + 'SoftwareApplication',
   name: SCHEMA + 'name',
   email: SCHEMA + 'email',
-  sameAs: SCHEMA + 'sameAs',
-  alternateName: SCHEMA + 'alternateName',
   softwareVersion: SCHEMA + 'softwareVersion',
 } as const;
 const P = PROVENANCE_TERMS;
@@ -85,40 +80,16 @@ const NOT_PART_OF = new Set([
   SCHEMA + 'itemListElement',
 ]);
 
-/** A Git account, as its host reports it (`GitHostProvider.currentAccount`). */
-export interface GitAccount {
-  /** The account's page: `https://gitlab.com/ada`. */
-  url: string;
-  /** Its username: `ada`. */
-  username?: string;
-  /** The name it shows. */
-  name?: string;
-  /** The email address it shows, where it shows one. */
-  email?: string;
-}
-
-/** A Git account as la-gram shows it (*Settings › You*, *Model settings*): `ada · https://gitlab.com/ada`. */
-export function accountText(account: GitAccount): string {
-  return [account.username, account.url].filter(Boolean).join(' · ');
-}
-
-/** Who is editing: the name, email address and Git account recorded with the edits, where known. */
+/** Who is editing: the name and, where known, the email address recorded with the edits. */
 export interface Editor {
   name?: string;
   email?: string;
-  /** Their account on the Git host the model is kept on: its page and username. */
-  account?: Pick<GitAccount, 'url' | 'username'>;
-}
-
-/** What names a user, most lasting first: their account's page, else their address, lower-cased, else their name. */
-export function editorKey(editor: Editor | undefined): string | undefined {
-  return editor?.account?.url?.trim() || editor?.email?.trim().toLowerCase() || editor?.name?.trim() || undefined;
 }
 
 export interface EditProvenanceOptions {
   /** The open model's IRI. */
   modelIri(): string | undefined;
-  /** The open model's namespace, which activities and users are named in. */
+  /** The open model's namespace, which activities and people are named in. */
   namespace(): string | undefined;
   /** Who is editing now; nobody known, only la-gram is recorded. */
   editor(): Editor | undefined;
@@ -230,13 +201,12 @@ export class EditProvenance {
     this.dropUnnamed(formerActivities, namespace);
   }
 
-  /** The activity edits go into, started now — with la-gram and the user — when none is going. */
+  /** The activity edits go into, started now — with la-gram and the person — when none is going. */
   private activityIn(namespace: string, when: Term): string {
     // The one going, while it is in this model: another model opened since starts another.
     if (this.activity?.startsWith(`${namespace}provenance/`) && this.has(nn(this.activity), IRI.rdfType)) return this.activity;
-    const activity = `${namespace}provenance/edit-${this.uuid()}`;
+    const activity = `${namespace}provenance/${this.uuid()}`;
     const t = (s: string, p: string, o: Term) => quad(nn(s), nn(p), o as never) as unknown as Quad;
-    const remove: Quad[] = [];
     const add: Quad[] = [
       t(activity, IRI.rdfType, nn(P.activity)),
       t(activity, P.startedAtTime, when),
@@ -251,27 +221,23 @@ export class EditProvenance {
       );
     }
     const editor = this.options.editor();
-    const key = editorKey(editor);
+    const key = editor?.email?.trim().toLowerCase() || editor?.name?.trim();
     if (key) {
-      const user = `${namespace}provenance/user-${keyDigest(key)}`;
-      const name = editor?.name?.trim();
-      const email = editor?.email?.trim();
-      const account = editor?.account;
-      add.push(t(activity, P.wasAssociatedWith, nn(user)), t(user, IRI.rdfType, nn(P.person)));
-      // What is known of the user now replaces what was: a name corrected, an address or an account added.
-      for (const p of [P.name, P.email, P.sameAs, P.alternateName]) remove.push(...this.get(nn(user), p));
-      if (name) add.push(t(user, P.name, literal(name) as unknown as Term));
-      if (email) add.push(t(user, P.email, literal(email) as unknown as Term));
-      if (account?.url) add.push(t(user, P.sameAs, nn(account.url)));
-      if (account?.username) add.push(t(user, P.alternateName, literal(account.username) as unknown as Term));
+      const person = `${namespace}provenance/${keyDigest(key)}`;
+      add.push(t(activity, P.wasAssociatedWith, nn(person)));
+      if (!this.has(nn(person), IRI.rdfType)) {
+        add.push(t(person, IRI.rdfType, nn(P.person)));
+        if (editor?.name?.trim()) add.push(t(person, P.name, literal(editor.name.trim()) as unknown as Term));
+        if (editor?.email?.trim()) add.push(t(person, P.email, literal(editor.email.trim()) as unknown as Term));
+      }
     }
-    this.write(remove, add);
+    this.store.addQuads(add);
     this.activity = activity;
     return activity;
   }
 
   /**
-   * Remove la-gram's activities among `activities` that no concept names any more, and then the users and
+   * Remove la-gram's activities among `activities` that no concept names any more, and then the people and
    * the la-gram versions no activity names. A converter's run and agent are not la-gram's to remove.
    */
   private dropUnnamed(activities: Set<string>, namespace: string): void {
@@ -364,8 +330,8 @@ function key(q: Quad): string {
 
 /** What the panel shows of a concept's provenance, read-only (Req 9.16). */
 export interface ConceptProvenance {
-  /** The last edit: when, by whom — and their account's page — with which tool, from the activity that generated it. */
-  changed?: { at: string; by?: string; account?: string; tool?: string };
+  /** The last edit: when, by whom, with which tool — from the activity that generated it. */
+  changed?: { at: string; by?: string; tool?: string };
   /** Its other PROV statements — a converter's `prov:wasDerivedFrom` its source — as predicate and value. */
   other: Array<{ predicate: string; value: string }>;
 }
@@ -382,7 +348,6 @@ export function provenanceOf(store: RdfStore, iri: string): ConceptProvenance {
   const at = first(iri, P.generatedAtTime) ?? (activity ? first(activity, P.endedAtTime) : undefined);
   if (!activity || !at) return { other };
   let by: string | undefined;
-  let account: string | undefined;
   let tool: string | undefined;
   for (const agent of get(activity, P.wasAssociatedWith).map((q) => q.object.value)) {
     const types = get(agent, IRI.rdfType).map((q) => q.object.value);
@@ -390,10 +355,7 @@ export function provenanceOf(store: RdfStore, iri: string): ConceptProvenance {
     if (types.includes(P.softwareAgent)) {
       const version = first(agent, P.softwareVersion);
       tool = [name ?? agent, version].filter(Boolean).join(' ');
-    } else if (types.includes(P.person)) {
-      by = name ?? first(agent, P.alternateName) ?? first(agent, P.email);
-      account = first(agent, P.sameAs);
-    }
+    } else if (types.includes(P.person)) by = name ?? first(agent, P.email);
   }
-  return { changed: { at, ...(by ? { by } : {}), ...(account ? { account } : {}), ...(tool ? { tool } : {}) }, other };
+  return { changed: { at, ...(by ? { by } : {}), ...(tool ? { tool } : {}) }, other };
 }
