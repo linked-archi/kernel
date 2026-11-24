@@ -17,15 +17,17 @@ decision PD-14).
 
 ## Status
 
-**K01: copied from la-gram and synced again on 2026-11-23; to type-check, test and pack again.** The first test run, on 2026-11-21, passed: 49 test files.
+**Both applications consume the same qualified source package.** The 2026-11-24 check passed typecheck and
+844 tests across 51 files. la-gram's migration builds web, desktop and CLI against the installed package and passes
+its browser suite. The workspace's browser test verifies complete RDF handoff and a canvas edit in la-gram.
 
-- **Source.** The modules are la-gram's `rdf-engine`, `metamodel-manager` and `model-manager`, with `model-io`, at
-  the same paths and byte for byte. They come from la-gram's branch `basic-interaction` on 2026-11-20.
-- **Tests.** 49 of their test files come with them. One is adapted, `turtle-writer.test.ts`, so that it no longer
-  reads la-gram's repository layout.
-- **Left behind.** 14 tests stay in la-gram, because they need its application.
-- **History.** The Git history is not imported yet: see `.agents/tasks/import-from-la-gram/`.
-- **Public API.** It is provisional until K02, which freezes it from what the workspace and la-gram actually call.
+- **Source:** model modules and assets are maintained here; la-gram holds no independent implementation.
+- **App-dependent tests:** 14 integration tests and their Basic fixture remain in la-gram's `src/__tests__/kernel/`.
+- **History:** historical import is still tracked in `.agents/tasks/import-from-la-gram/`.
+- **Public API:** provisional until K02. Application-specific `src/workspace/` code is scheduled to move into the
+  workspace; generic model and SHACL functions remain here.
+- **Acceptance:** the broader two-tool gate still needs ArchiMate 3.2 and a Studio-generated extension. Local RDF
+  handoff does not establish shared versioned persistence or live collaboration.
 
 | To read | Where |
 |---|---|
@@ -47,7 +49,7 @@ import { diffModels } from '@linked-archi/kernel/model-manager/model-diff.js'; /
 Until K02 publishes a version, a consumer installs the tarball `npm pack` makes here:
 
 ```json
-"@linked-archi/kernel": "file:../linked-archi-kernel/linked-archi-kernel-0.0.0.tgz"
+"@linked-archi/kernel": "file:vendor/linked-archi-kernel-0.1.0.tgz"
 ```
 
 **Do not link the folder** (`file:../linked-archi-kernel`). The link brings this repository's own `node_modules/`,

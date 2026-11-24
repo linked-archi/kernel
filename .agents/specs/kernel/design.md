@@ -59,7 +59,7 @@ rewritten on the kernel's API.
 
 - **KD-1 The same paths as la-gram.** The modules keep `src/rdf-engine/…`, `src/metamodel-manager/…`,
   `src/model-manager/…` and `src/import-export/model-io.ts`.
-  - A fix copies to la-gram file for file while it still holds a copy (`conventions.md`).
+  - After L01, a fix is delivered through a qualified package update, not a source copy.
   - Git history imported with `git filter-repo --path …` lands on the same files.
   - la-gram's migration changes import paths only.
   - Renaming the layout, if ever, waits until L01 has ended.
@@ -80,9 +80,8 @@ rewritten on the kernel's API.
   (`npm run sync-assets`).
   - **In Node**, the existing discovery walks up from `src/metamodel-manager/` to the package root and finds
     `assets/`, in this repository and in an installed package alike.
-  - **In a browser**, the application copies `assets/` into its build, as la-gram's webpack already does from its
-    own folder. Today the URL is resolved against `document.baseURI`. A host page is not the workspace's asset
-    location, so K02 makes the base a setting (workspace WD-7).
+  - **In a browser**, the application copies `assets/` into its build, as la-gram's webpack does from the installed package. `BundledAssetSource` and `assetUrl` accept a per-consumer
+    base URL; legacy callers retain document-relative resolution (workspace WD-7).
   - **Answers K01's question** of where bundled metamodels ship.
 - **KD-4 Tests that need la-gram's application stay in la-gram.** The 14 above. Copying them would bring the
   application with them.

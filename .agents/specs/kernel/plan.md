@@ -18,8 +18,10 @@ flowchart LR
 | **K01** | Repository; the modules, their tests, fixtures, scripts and assets copied from la-gram; package, type-check, tests, CI; Git history imported | `npm install`, `npm run typecheck` and `npm test` pass; `npm pack` produces a tarball that installs in an empty project; the history import matches the copy file for file |
 | **K02** | The public API, frozen from the calls the workspace (W03, W04) and la-gram (L01) make; the findings queued in `tasks.md`; the conformance suite; the first published version | A published version installs from the registry; the conformance suite gives the same IRIs, Turtle and findings in the kernel, la-gram and the platform's validator |
 
-**L01**, la-gram's move onto the package, is la-gram's own task. It starts as soon as K01's tests pass. Until it ends,
-the rule in `conventions.md` holds: fix here first, copy to la-gram.
+**L01:** la-gram consumes the same installed archive as the workspace as of 2026-11-24. Its migration task
+records web/desktop/CLI/browser checks and the API inventory. Shared modules are no longer copied between
+repositories. Updates are made here and delivered through a qualified archive and consumer lockfiles.
+The migration task retains explicit closure checks; E1/A remains open for the full metamodel matrix.
 
 ## K01 order
 

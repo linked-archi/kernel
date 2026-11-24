@@ -6,6 +6,11 @@
 
 ## Workspace integration verification — 2026-11-24
 
+- [x] Owner step 3: removed the copy-transition section from conventions; README/design/plan describe the installed
+  package and retained application tests. la-gram's migration task owns its API usage inventory. Remaining K01
+  history and K02 publication work are not marked complete.
+
+
 The owner requested checks before the migration commits, then documentation, then moving application-specific
 `src/workspace/` code out of this package. This records executable evidence; it does not close K01 history import,
 K02 API publication, or the PD-17 two-tool gate.

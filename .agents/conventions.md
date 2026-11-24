@@ -29,19 +29,12 @@ code (platform decision PD-14). It has no UI and no application. It started as l
    location come from the caller. This holds from K02; until then, la-gram's names remain (see `tasks.md`, *Queued
    for K02*).
 
-## While la-gram still holds a copy (until L01 ends)
+## Consumer integration after L01
 
-la-gram keeps its own copy of these modules until its migration task (L01) moves it onto this package. Until then:
-
-- **Fix here first,** then copy the same change to la-gram, file for file, in the same piece of work.
-- **New behaviour goes here only.** la-gram receives it with L01.
-- **The paths stay la-gram's** (`src/rdf-engine/…`, `src/model-manager/…`), so a change copies across unchanged
-  (KD-1).
-- **Check for drift before committing.** Every copied file must match la-gram's, except
-  `src/rdf-engine/__tests__/turtle-writer.test.ts`, the one adapted test. A change made in la-gram first, as on
-  2026-11-21, is copied here in the same piece of work.
-- **la-gram's tests must keep passing** with the changed copy, and so must the 14 tests that stayed there (listed in
-  `tasks/import-from-la-gram/copy-manifest.json`).
+la-gram and the workspace install the same qualified kernel archive. Shared model fixes and asset updates are made
+and tested here, then delivered by a package update with each consumer's lockfile. Do not copy modules into a
+consumer or edit an installed package. la-gram's `.agents/tasks/kernel-migration/api-usage.md` inventories its
+module calls for K02; that task records compatibility checks and each integration change's reason.
 
 ## Code Conventions
 
@@ -95,7 +88,7 @@ scripts/               sync-assets.mjs (refresh assets/), bench-model.mjs (gener
 ### Finishing a change
 
 1. **Tests.** `npm run typecheck` and `npm test`. A fixed bug gets a test that fails without the fix.
-2. **la-gram**, while L01 is open: the same change copied, la-gram's tests passing.
+2. **Consumers:** update the installed archive and lockfiles together, and run the relevant la-gram and workspace conformance checks.
 3. **`specs/kernel/`**: a requirement changed or added (KReq n.m); a decision made for a reason (KD-n); the
    checklist and an entry at the top of the change log in `tasks.md`.
 4. **The bundled assets**, when the change needs meta's: `npm run sync-assets`.
