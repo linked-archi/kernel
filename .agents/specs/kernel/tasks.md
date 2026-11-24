@@ -4,6 +4,23 @@
 
 ---
 
+## Workspace integration verification — 2026-11-24
+
+The owner requested checks before the migration commits, then documentation, then moving application-specific
+`src/workspace/` code out of this package. This records executable evidence; it does not close K01 history import,
+K02 API publication, or the PD-17 two-tool gate.
+
+- [x] Re-read platform PD-16/PD-17 and workspace WD-15: any chosen metamodel; fixed screens; Studio authors extensions.
+- [x] `npm run typecheck` passed on the `0cee219` code checkpoint.
+- [x] `npm test` passed: **51 files, 844 tests** (including seven editor/fixture checks).
+- [x] Both consumers install the same `vendor/linked-archi-kernel-0.1.0.tgz`; their lockfiles pin its integrity.
+- [x] Workspace browser handoff opens, edits, saves, imports into la-gram, renames on its canvas, imports back,
+  and compares all RDF quads. The strict CSP workspace reports no errors.
+- [ ] Follow-up requested by owner: retain tool-neutral model/SHACL parts under neutral names and move the
+  application session from `src/workspace/` to the workspace repository (step 4).
+- [ ] E1/A remains open: complete the ArchiMate 3.2 and Studio-generated extension matrix, plus remaining inventory,
+  forms and performance criteria. No gate is inferred from the mocks.
+
 ## K01 Repository, copy, build, tests
 
 **2026-11-23: synced with la-gram again; checks to run again.**
