@@ -26,6 +26,7 @@ import { DataFactory, Parser, Writer } from 'n3';
 import type { Quad } from '@rdfjs/types';
 import type { RdfStore } from '../rdf-engine/interfaces.js';
 import { modelQuads } from './model-queries.js';
+import { scopedName } from '../storage-scope.js';
 
 /** One explicit commit of a model's working state. */
 export interface Commit {
@@ -70,14 +71,15 @@ export class MemoryVersionStore implements VersionStore {
   }
 }
 
-const DB_NAME = 'la-gram-history';
+/** A channel's build keeps its own (`storage-scope.ts`): `la-gram-history-alpha`. */
+const DB_NAME = scopedName('la-gram-history');
 const DB_STORE = 'commits';
 
 /** Commits in IndexedDB, one record per commit, indexed by model. */
 export class IndexedDbVersionStore implements VersionStore {
   private db?: Promise<IDBDatabase>;
 
-  constructor(private readonly factory: IDBFactory) {}
+  constructor(private readonly factory: IDBFactory, private readonly name = DB_NAME) {}
 
   async list(modelIri: string): Promise<Commit[]> {
     const db = await this.open();
@@ -99,7 +101,7 @@ export class IndexedDbVersionStore implements VersionStore {
 
   private open(): Promise<IDBDatabase> {
     this.db ??= new Promise((resolve, reject) => {
-      const request = this.factory.open(DB_NAME, 1);
+      const request = this.factory.open(this.name, 1);
       request.onupgradeneeded = () => {
         const store = request.result.createObjectStore(DB_STORE, { keyPath: 'id' });
         store.createIndex('modelIri', 'modelIri');
@@ -112,9 +114,9 @@ export class IndexedDbVersionStore implements VersionStore {
 }
 
 /** IndexedDB when the environment has it, else memory. */
-export function createVersionStore(): VersionStore {
+export function createVersionStore(name?: string): VersionStore {
   const factory = (globalThis as { indexedDB?: IDBFactory }).indexedDB;
-  return factory ? new IndexedDbVersionStore(factory) : new MemoryVersionStore();
+  return factory ? new IndexedDbVersionStore(factory, name) : new MemoryVersionStore();
 }
 
 /** The model's triples as canonical N-Triples lines: sorted, each once. */

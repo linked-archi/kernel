@@ -4,7 +4,7 @@
 
 **Status, 2026-11-20.**
 
-- **The files are copied:** 413 of them, byte for byte, from la-gram's working tree on branch `basic-interaction`.
+- **The files are copied:** 413 of them, byte for byte, from la-gram's working tree on branch `basic-interaction`. Seven were synced again from `pre-release` on 2026-11-23 (`copy-manifest.json`, `syncs`).
   `copy-manifest.json` lists what was adapted (one test) and the 14 tests that stayed in la-gram (KD-4).
 - **The history is not imported yet:** Git does not run on the machine until Apple's command-line developer tools
   are installed (`xcode-select --install`).
@@ -14,19 +14,21 @@
 The copy keeps la-gram's paths (KD-1). So a clone of la-gram, filtered to these paths, has the same files with their
 history. This repository's own files then go on top as one commit.
 
-1. **In la-gram**, commit what is in progress, so the history holds what was copied. Choose the branch to take
-   history from: `basic-interaction`, or `main` once that is merged.
+1. **In la-gram**, commit what is in progress, so the history holds what was copied. The kernel was synced on
+   2026-11-23 from `pre-release`, which then held la-gram's latest work: take history from that branch, or from
+   whatever it is merged into. Choose the branch to take
+   history from: `pre-release`, or the branch it is merged into.
 
 2. **Filter a fresh clone** to the kernel's paths. Install `git-filter-repo` first, with `brew install git-filter-repo`.
 
    ```sh
    git clone --no-local linked.archi/tools/modellers/la-gram /tmp/la-kernel-history
    cd /tmp/la-kernel-history
-   git checkout basic-interaction
+   git checkout pre-release
    git filter-repo --force \
      --path src/rdf-engine/ --path src/metamodel-manager/ --path src/model-manager/ \
      --path src/import-export/model-io.ts --path src/import-export/__tests__/model-io.test.ts \
-     --path src/types/build-flags.d.ts --path src/__tests__/sync-assets.test.ts \
+     --path src/types/build-flags.d.ts --path src/storage-scope.ts --path src/__tests__/sync-assets.test.ts \
      --path src/__tests__/fixtures/merge/ --path src/__tests__/fixtures/diff/ \
      --path scripts/sync-assets.mjs --path scripts/bench-model.mjs \
      --path assets/ --path LICENSE

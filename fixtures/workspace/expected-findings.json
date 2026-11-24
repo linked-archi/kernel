@@ -1,0 +1,26 @@
+[
+  {
+    "focusNode": "https://example.org/acme/shop/gift-wrapping",
+    "resultPath": "",
+    "sourceShape": "https://meta.linked.archi/archimate4/principle-shapes#SinglePointOfFailureShape",
+    "message": "Service Gift wrapping is realized by only one application component (Payments). Consider redundancy for critical services.",
+    "severity": "Info",
+    "sourceConstraintComponent": "http://www.w3.org/ns/shacl#SPARQLConstraintComponent"
+  },
+  {
+    "focusNode": "https://example.org/acme/shop/online-ordering",
+    "resultPath": "",
+    "sourceShape": "https://meta.linked.archi/archimate4/principle-shapes#SinglePointOfFailureShape",
+    "message": "Service Online ordering is realized by only one application component (Web shop). Consider redundancy for critical services.",
+    "severity": "Info",
+    "sourceConstraintComponent": "http://www.w3.org/ns/shacl#SPARQLConstraintComponent"
+  },
+  {
+    "focusNode": "https://example.org/acme/shop/card-payment",
+    "resultPath": "",
+    "sourceShape": "https://meta.linked.archi/archimate4/principle-shapes#SinglePointOfFailureShape",
+    "message": "Service Card payment is realized by only one application component (Payments). Consider redundancy for critical services.",
+    "severity": "Info",
+    "sourceConstraintComponent": "http://www.w3.org/ns/shacl#SPARQLConstraintComponent"
+  }
+]

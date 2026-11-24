@@ -17,7 +17,7 @@ decision PD-14).
 
 ## Status
 
-**K01: copied from la-gram, not yet installed, type-checked or tested.**
+**K01: copied from la-gram and synced again on 2026-11-23; to type-check, test and pack again.** The first test run, on 2026-11-21, passed: 49 test files.
 
 - **Source.** The modules are la-gram's `rdf-engine`, `metamodel-manager` and `model-manager`, with `model-io`, at
   the same paths and byte for byte. They come from la-gram's branch `basic-interaction` on 2026-11-20.

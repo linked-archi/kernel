@@ -2,7 +2,7 @@
   "source": "tools/modellers/la-gram",
   "branch": "basic-interaction",
   "copied": "2026-11-20",
-  "files": 413,
+  "files": 414,
   "adapted": [
     "src/rdf-engine/__tests__/turtle-writer.test.ts"
   ],
@@ -21,5 +21,21 @@
     "src/model-manager/__tests__/relationship-ranking.test.ts",
     "src/model-manager/__tests__/relationship-validity.test.ts",
     "src/rdf-engine/__tests__/validation-engine.test.ts"
+  ],
+  "syncs": [
+    {
+      "date": "2026-11-23",
+      "from_branch": "pre-release",
+      "files": [
+        "src/model-manager/__tests__/model-diff.test.ts",
+        "src/model-manager/model-diff-text.ts",
+        "src/model-manager/model-diff.ts",
+        "src/model-manager/provenance.ts",
+        "src/model-manager/version-history.ts",
+        "src/types/build-flags.d.ts",
+        "src/storage-scope.ts"
+      ],
+      "note": "la-gram changes of 2026-11-21 (edit record in model diff, Git account in provenance, storage channel) that had reached la-gram only; storage-scope.ts added because version-history.ts now imports it"
+    }
   ]
 }

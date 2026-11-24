@@ -37,6 +37,9 @@ la-gram keeps its own copy of these modules until its migration task (L01) moves
 - **New behaviour goes here only.** la-gram receives it with L01.
 - **The paths stay la-gram's** (`src/rdf-engine/…`, `src/model-manager/…`), so a change copies across unchanged
   (KD-1).
+- **Check for drift before committing.** Every copied file must match la-gram's, except
+  `src/rdf-engine/__tests__/turtle-writer.test.ts`, the one adapted test. A change made in la-gram first, as on
+  2026-11-21, is copied here in the same piece of work.
 - **la-gram's tests must keep passing** with the changed copy, and so must the 14 tests that stayed there (listed in
   `tasks/import-from-la-gram/copy-manifest.json`).
 
@@ -77,6 +80,7 @@ src/
   model-manager/       session, namespace, element/relationship/view managers, cascade, diff, merge, questions
   import-export/       model-io.ts only: reading and writing model files
   types/               build-flags.d.ts, the build-time globals the modules read (until K02)
+  storage-scope.ts     the browser storage names by la-gram's channel; version-history.ts needs it (until K02)
   __tests__/           sync-assets.test.ts, and fixtures/merge and fixtures/diff (the seed of the conformance suite)
 assets/                bundled metamodels, laid out as meta.linked.archi
 scripts/               sync-assets.mjs (refresh assets/), bench-model.mjs (generated models for the timing tests)

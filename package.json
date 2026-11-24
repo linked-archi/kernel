@@ -1,6 +1,6 @@
 {
   "name": "@linked-archi/kernel",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "The Linked.Archi model kernel: metamodel loading, permitted relationships, IRIs, model changes, diff and merge, SHACL validation and canonical Turtle, shared by la-gram and the Linked.Archi workspace.",
   "license": "Apache-2.0",
   "type": "module",
@@ -14,7 +14,9 @@
     "./model-manager": "./src/model-manager/index.ts",
     "./assets/*": "./assets/*",
     "./package.json": "./package.json",
-    "./*.js": "./src/*.ts"
+    "./*.js": "./src/*.ts",
+    "./workspace": "./src/workspace/model.ts",
+    "./forms": "./src/workspace/forms.ts"
   },
   "files": [
     "src",
@@ -24,7 +26,8 @@
     "scripts/sync-assets.mjs",
     "LICENSE",
     "NOTICE",
-    "README.md"
+    "README.md",
+    "fixtures"
   ],
   "sideEffects": false,
   "scripts": {
@@ -39,13 +42,13 @@
   "dependencies": {
     "@rdfjs/types": "^2.0.1",
     "n3": "2.13.12",
-    "oxigraph": "^0.5.11",
-    "rdf-validate-shacl": "^0.5.0"
+    "oxigraph": "0.5.11",
+    "rdf-validate-shacl": "^0.5.0",
+    "@types/n3": "^1.26.1",
+    "@types/rdf-validate-shacl": "^0.5.7"
   },
   "devDependencies": {
-    "@types/n3": "^1.26.1",
     "@types/node": "^24.19.2",
-    "@types/rdf-validate-shacl": "^0.5.7",
     "@vitest/coverage-v8": "^4.1.12",
     "fast-check": "^3.17.0",
     "typescript": "^5.4.0",

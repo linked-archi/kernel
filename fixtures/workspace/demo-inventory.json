@@ -1,0 +1,49 @@
+{
+  "model": "https://example.org/acme/shop/model",
+  "label": "Acme online shop",
+  "metamodels": [
+    "https://meta.linked.archi/archimate4/metamodel#ArchiMate4"
+  ],
+  "rows": [
+    {
+      "iri": "https://example.org/acme/shop/payments",
+      "label": "Payments",
+      "type": "https://meta.linked.archi/archimate4/onto#ApplicationComponent"
+    },
+    {
+      "iri": "https://example.org/acme/shop/web-shop",
+      "label": "Web shop",
+      "type": "https://meta.linked.archi/archimate4/onto#ApplicationComponent"
+    },
+    {
+      "iri": "https://example.org/acme/shop/customer",
+      "label": "Customer",
+      "type": "https://meta.linked.archi/archimate4/onto#BusinessActor"
+    },
+    {
+      "iri": "https://example.org/acme/shop/shop-team",
+      "label": "Shop team",
+      "type": "https://meta.linked.archi/archimate4/onto#BusinessActor"
+    },
+    {
+      "iri": "https://example.org/acme/shop/place-order",
+      "label": "Place order",
+      "type": "https://meta.linked.archi/archimate4/onto#Process"
+    },
+    {
+      "iri": "https://example.org/acme/shop/card-payment",
+      "label": "Card payment",
+      "type": "https://meta.linked.archi/archimate4/onto#Service"
+    },
+    {
+      "iri": "https://example.org/acme/shop/gift-wrapping",
+      "label": "Gift wrapping",
+      "type": "https://meta.linked.archi/archimate4/onto#Service"
+    },
+    {
+      "iri": "https://example.org/acme/shop/online-ordering",
+      "label": "Online ordering",
+      "type": "https://meta.linked.archi/archimate4/onto#Service"
+    }
+  ]
+}

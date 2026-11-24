@@ -28,7 +28,8 @@ flowchart LR
 |---|---|
 | `src/rdf-engine/`, `src/metamodel-manager/`, `src/model-manager/`, with their tests | all, except 14 tests |
 | `src/import-export/model-io.ts` and its test | `model-merge.ts` reads model files through it, and the kernel's API serializes models |
-| `src/types/build-flags.d.ts` | declares the build-time globals two modules read |
+| `src/types/build-flags.d.ts` | declares the build-time globals the modules read |
+| `src/storage-scope.ts` (from 2026-11-23) | names the checkpoints' IndexedDB database by la-gram's release channel; `version-history.ts` imports it. K02 makes the name the caller's |
 | `src/__tests__/fixtures/merge/`, `diff/`; `src/__tests__/sync-assets.test.ts` | fixtures of the merge, diff and missing-reference tests; the asset sync's test |
 | `scripts/sync-assets.mjs`, `scripts/bench-model.mjs` | the asset refresh; the generated models of the timing tests |
 | `assets/` | the bundled metamodels, 271 files |

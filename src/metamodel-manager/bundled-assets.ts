@@ -75,6 +75,13 @@
  * `coreQuestions` the core one, which no manifest names because it applies to
  * every model: model questions the SPARQL tab offers and the Validation tab runs
  * as model checks (`model-manager/questions.ts`). They are never model data.
+ * `coreNotation` is the notation of the core's own relationship types
+ * (`core-notation`), which no manifest names either: its sets are consulted
+ * after every loaded metamodel's default set, the last fallback layer of the
+ * notation lookup (`coreNotationSetIris`, VC-DD-5). It draws Association,
+ * Depends On, Has Part and Refines, and lets nesting stand for Has Part and
+ * Refines: the part inside the whole, a view inside the box of the element it
+ * refines.
  */
 export type BundledAssetRole =
   | 'manifest'
@@ -91,7 +98,8 @@ export type BundledAssetRole =
   | 'coreVisOntology'
   | 'coreShapes'
   | 'questions'
-  | 'coreQuestions';
+  | 'coreQuestions'
+  | 'coreNotation';
 
 /** A single TTL file shipped with the application. */
 export interface BundledAsset {
@@ -182,8 +190,8 @@ export const BUNDLED_ICON_PREFIXES: readonly string[] = [
  * Open Group Exchange Format — the one interchange format every ArchiMate tool
  * writes — is a 3.x format, so importing an exchange file needs the 3.2
  * ontology whether or not the network is up. Basic ships because it is the
- * generic language — elements and relationships no other loaded language has,
- * its Connection relating any two elements — and that has to work offline too.
+ * generic language — elements no other loaded language has, its Connection
+ * relating any two of them — and that has to work offline too.
  * Architecture Decisions ships because it is added beside whichever language is
  * loaded, to record the decisions about a model: an extension, with no
  * presentation contexts and no notation of its own.
@@ -303,6 +311,11 @@ export const BUNDLED_ASSETS: readonly BundledAsset[] = [
     role: 'coreQuestions',
     ontologyIri: 'https://meta.linked.archi/core-questions#',
     path: 'core/core-questions.ttl',
+  },
+  {
+    role: 'coreNotation',
+    ontologyIri: 'https://meta.linked.archi/core-notation#',
+    path: 'core/core-notation.ttl',
   },
   ...languageAssets('archimate4', 'archimate4', 'archimate4', '4.0'),
   // The ArchiMate versions publish question sets; the other languages do not yet.
@@ -525,9 +538,16 @@ export const ASSETS_VERSION = typeof __LA_GRAM_ASSETS_VERSION__ === 'string' ? _
  * and a browser would otherwise draw a glyph from its copy of the old file
  * after the assets were synced again. The servers read the path alone.
  */
-export function assetUrl(assetPath: string): string {
-  const relative = `${ASSET_ROOT}/${assetPath}${ASSETS_VERSION ? `?v=${ASSETS_VERSION}` : ''}`;
-  const baseUri = typeof document !== 'undefined' ? document.baseURI : undefined;
+export interface BundledAssetOptions {
+  /** Per-consumer URL of the directory containing assets/. Never a module-global override. */
+  baseUrl?: string;
+  version?: string;
+}
+
+export function assetUrl(assetPath: string, options: BundledAssetOptions = {}): string {
+  const version = options.version ?? ASSETS_VERSION;
+  const relative = `${ASSET_ROOT}/${assetPath}${version ? `?v=${encodeURIComponent(version)}` : ''}`;
+  const baseUri = options.baseUrl ?? (typeof document !== 'undefined' ? document.baseURI : undefined);
   return baseUri ? new URL(relative, baseUri).href : relative;
 }
 
@@ -539,10 +559,10 @@ export function assetUrl(assetPath: string): string {
  * @throws If the asset cannot be read — a missing file in Node, or a non-OK
  *   response in the browser.
  */
-export async function fetchAssetText(asset: BundledAsset | string): Promise<string> {
+export async function fetchAssetText(asset: BundledAsset | string, options: BundledAssetOptions = {}): Promise<string> {
   const assetPath = typeof asset === 'string' ? asset : asset.path;
 
-  const readFile = await getFileReader();
+  const readFile = options.baseUrl ? null : await getFileReader();
   if (readFile !== null) {
     const root = await nodeAssetRoot(readFile);
     return readFile(`${root}/${ASSET_ROOT}/${assetPath}`, 'utf-8');
@@ -554,7 +574,7 @@ export async function fetchAssetText(asset: BundledAsset | string): Promise<stri
     );
   }
 
-  const url = assetUrl(assetPath);
+  const url = assetUrl(assetPath, options);
   // Revalidate: the static server sends no Cache-Control, and a re-synced
   // snapshot must not be shadowed by the browser's copy of the old one.
   const response = await fetch(url, { cache: 'no-cache' });
