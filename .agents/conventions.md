@@ -69,8 +69,8 @@ Also:
 src/
   index.ts             provisional entry: each module as a namespace (KD-5)
   rdf-engine/          store, observable wrapper, IRIs, parser/serializer, canonical Turtle, SHACL, validation worker
-  metamodel-manager/   asset sources, loader, catalogue, palette, notation, viewpoints, bundled assets
-  model-manager/       session, namespace, element/relationship/view managers, cascade, diff, merge, questions
+  metamodel-manager/   asset sources, loader, catalogue, palette, notation, viewpoints, SHACL property descriptors
+  model-manager/       session, namespace, element/relationship/view managers, RDF edits, cascade, diff, merge, questions
   import-export/       model-io.ts only: reading and writing model files
   types/               build-flags.d.ts, the build-time globals the modules read (until K02)
   storage-scope.ts     the browser storage names by la-gram's channel; version-history.ts needs it (until K02)

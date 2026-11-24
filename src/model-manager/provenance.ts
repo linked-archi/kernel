@@ -1,3 +1,4 @@
+/// <reference path="../types/build-flags.d.ts" />
 /**
  * The provenance of edits (meta's DD-27, *What a modeller records of its edits*; Req 9.16): who changed a
  * concept, when, and with which la-gram — recorded as the concept is edited, inside the edit, so that what

@@ -318,8 +318,9 @@ export function createAssetSource(
   mode: AssetMode,
   uploaded: UploadedAssetSource = new UploadedAssetSource(),
   remoteOptions?: RemoteAssetSourceOptions,
+  bundledOptions?: BundledAssetOptions,
 ): ChainedAssetSource {
-  const bundled = new BundledAssetSource();
+  const bundled = new BundledAssetSource(bundledOptions);
   if (mode === 'offline') return new ChainedAssetSource([uploaded, bundled]);
   const remote = new RemoteAssetSource(remoteOptions);
   return mode === 'remote-first'

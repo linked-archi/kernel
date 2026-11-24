@@ -102,3 +102,12 @@ rewritten on the kernel's API.
 | The browser asset base as a setting (KD-3) | K02 |
 | The tool's identity in provenance, now la-gram's (`model-manager/provenance.ts`) | K02 |
 | Kernel-neutral names for the build flags `__LA_GRAM_ASSETS_VERSION__` and `__LA_GRAM_BUILD__` | K02 |
+
+## KD-6 Neutral operations, consumer-owned sessions (2026-11-24)
+
+There is no `src/workspace/` API. The workspace owns its session facade, draft checkpoint format, software agent,
+undo history and save policy. `metamodel-manager/property-shapes.ts` reads SHACL metadata without a screen model;
+`model-manager/resource-edits.ts` edits RDF properties/types and serializes change sets. Shared conformance RDF
+lives in `fixtures/interoperability/`; application grid projections do not ship in this package. Optional bundled
+asset options are passed through the existing source factory. Source declarations reference their own build-flag
+ambient types so consumers need no global shim.

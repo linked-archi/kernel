@@ -1,3 +1,4 @@
+/// <reference path="./types/build-flags.d.ts" />
 /**
  * Where a build keeps what it stores in the browser (Req 15.10). The release at `/la-gram/` and the alpha at
  * `/la-gram-alpha/` are one origin, and an origin's `localStorage` and IndexedDB are shared by every page of

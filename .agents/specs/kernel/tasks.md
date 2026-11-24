@@ -21,8 +21,12 @@ K02 API publication, or the PD-17 two-tool gate.
 - [x] Both consumers install the same `vendor/linked-archi-kernel-0.1.0.tgz`; their lockfiles pin its integrity.
 - [x] Workspace browser handoff opens, edits, saves, imports into la-gram, renames on its canvas, imports back,
   and compares all RDF quads. The strict CSP workspace reports no errors.
-- [ ] Follow-up requested by owner: retain tool-neutral model/SHACL parts under neutral names and move the
-  application session from `src/workspace/` to the workspace repository (step 4).
+- [x] Owner step 4: `src/workspace/` removed. Neutral `property-shapes` and `resource-edits` remain here;
+  session/recovery/history and seven integration tests moved to the workspace. Fixtures renamed `interoperability`.
+  Package 0.1.1 passes typecheck and **52 files / 839 tests**; the missing seven now run in the consumer.
+  Source declarations include their ambient build types; asset factory accepts optional bundled URL options.
+  Both consumers pass typecheck, units, builds, host/modeller browser suites and the bidirectional handoff;
+  la-gram-git passes documentation/smoke checks, including an isolated installed package.
 - [ ] E1/A remains open: complete the ArchiMate 3.2 and Studio-generated extension matrix, plus remaining inventory,
   forms and performance criteria. No gate is inferred from the mocks.
 
@@ -85,8 +89,9 @@ Findings from K01, recorded 2026-11-20, not started:
 
 ## Known limitations
 
-- **Unverified:** see K01.
-- **The kernel still speaks as la-gram** in provenance and in its build-flag names, until K02.
+- **Qualification:** current consumer evidence is recorded above; historical K01 entries are retained below.
+- **Legacy defaults:** provenance and checkpoint names can now come from the caller; build flag names and defaults
+  still preserve la-gram compatibility until K02.
 - **No compiled build:** consumers need a TypeScript-aware bundler or runner (KD-2).
 
 ## Change log

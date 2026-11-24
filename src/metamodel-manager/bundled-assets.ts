@@ -1,3 +1,4 @@
+/// <reference path="../types/build-flags.d.ts" />
 /**
  * Registry of the metamodel assets bundled with the application.
  *

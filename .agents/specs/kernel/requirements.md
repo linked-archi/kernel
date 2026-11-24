@@ -37,6 +37,8 @@ that I can open and edit it in either tool and lose nothing.
 2. The bundled metamodels ship in the package, in `assets/`, laid out as `https://meta.linked.archi/` (KD-3).
 3. The bundled copies are byte-identical to their published source and are refreshed with `npm run sync-assets`.
 
+4. SHACL property descriptors retain declared groups, order, names and constraints without choosing a screen layout.
+
 ### Requirement 4: Model operations
 
 1. Elements, relationships, views and their geometry are created, renamed, retyped and deleted as la-gram's
@@ -46,6 +48,8 @@ that I can open and edit it in either tool and lose nothing.
    - the plain triple, which the resource `rdf:reifies`;
    - its membership in the model.
 3. Every removal that can be undone has a twin that returns exactly the quads it removes.
+4. Generic property and type edits preserve other predicates, additional types and contexts. Application identity,
+   command history and recovery policy remain in the consumer.
 4. Model data has no blank nodes.
 
 ### Requirement 5: Change, diff and merge

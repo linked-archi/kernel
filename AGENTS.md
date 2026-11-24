@@ -1,7 +1,6 @@
 # Working on linked-archi-kernel
 
-Read [`.agents/conventions.md`](.agents/conventions.md) first. It covers what the kernel is, the rule for changing
-code that la-gram still holds a copy of, and the checklist for finishing a change.
+Read [`.agents/conventions.md`](.agents/conventions.md) first. It covers what the kernel is, the installed-package consumer contract, and the checklist for finishing a change.
 
 | Path | Holds |
 |---|---|

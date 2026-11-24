@@ -18,14 +18,14 @@ decision PD-14).
 ## Status
 
 **Both applications consume the same qualified source package.** The 2026-11-24 check passed typecheck and
-844 tests across 51 files. la-gram's migration builds web, desktop and CLI against the installed package and passes
+839 tests across 52 files. la-gram's migration builds web, desktop and CLI against the installed package and passes
 its browser suite. The workspace's browser test verifies complete RDF handoff and a canvas edit in la-gram.
 
 - **Source:** model modules and assets are maintained here; la-gram holds no independent implementation.
 - **App-dependent tests:** 14 integration tests and their Basic fixture remain in la-gram's `src/__tests__/kernel/`.
 - **History:** historical import is still tracked in `.agents/tasks/import-from-la-gram/`.
-- **Public API:** provisional until K02. Application-specific `src/workspace/` code is scheduled to move into the
-  workspace; generic model and SHACL functions remain here.
+- **Public API:** provisional until K02. Application sessions live in their consumers. Neutral `metamodel-manager/property-shapes.ts` and
+  `model-manager/resource-edits.ts` provide reusable SHACL descriptors and RDF edits.
 - **Acceptance:** the broader two-tool gate still needs ArchiMate 3.2 and a Studio-generated extension. Local RDF
   handoff does not establish shared versioned persistence or live collaboration.
 
@@ -49,7 +49,7 @@ import { diffModels } from '@linked-archi/kernel/model-manager/model-diff.js'; /
 Until K02 publishes a version, a consumer installs the tarball `npm pack` makes here:
 
 ```json
-"@linked-archi/kernel": "file:vendor/linked-archi-kernel-0.1.0.tgz"
+"@linked-archi/kernel": "file:vendor/linked-archi-kernel-0.1.1.tgz"
 ```
 
 **Do not link the folder** (`file:../linked-archi-kernel`). The link brings this repository's own `node_modules/`,
