@@ -3,6 +3,14 @@
   "version": "0.1.4",
   "description": "The Linked.Archi model kernel: metamodel loading, permitted relationships, IRIs, model changes, diff and merge, SHACL validation and canonical Turtle, shared by la-gram and the Linked.Archi workspace.",
   "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/linked-archi/kernel.git"
+  },
+  "homepage": "https://github.com/linked-archi/kernel#readme",
+  "bugs": {
+    "url": "https://github.com/linked-archi/kernel/issues"
+  },
   "type": "module",
   "engines": {
     "node": ">=22"

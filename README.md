@@ -1,7 +1,7 @@
 # linked-archi-kernel
 
-`@linked-archi/kernel`: the model logic shared by [la-gram](../../modellers/la-gram/README.md) and the Linked.Archi
-workspace. It covers:
+`@linked-archi/kernel`: the model logic shared by [la-gram](https://github.com/linked-archi/la-gram) and the
+Linked.Archi workspace. Its repository: <https://github.com/linked-archi/kernel>. It covers:
 
 - loading Linked.Archi metamodels and selecting language-tagged labels from ontologies and taxonomies;
 - deciding which relationships the shapes permit;
