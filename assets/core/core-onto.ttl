@@ -34,12 +34,12 @@ Trademarked names (UML, BPMN, ArchiMate, TOGAF, etc.) referenced herein are prop
     '''@en ;
     dcterms:created                                         "2019-03-17"^^xsd:date ;
     dcterms:issued                                          "2019-03-17"^^xsd:date ;
-    dcterms:modified                                        "2026-11-22"^^xsd:date ;
+    dcterms:modified                                        "2026-11-24"^^xsd:date ;
     dcterms:publisher                                            "Linked.Archi"@en, <https://linked.archi> ;
     bibo:status                                             "draft" ;
-    owl:versionIRI                                          <https://meta.linked.archi/core#> ;
-    owl:versionInfo                                         "0.7.0"@en ;
-    owl:priorVersion                                        <https://meta.linked.archi/core/0.6.0#> ;
+    owl:versionIRI                                          <https://meta.linked.archi/core/0.8.0#> ;
+    owl:versionInfo                                         "0.8.0"@en ;
+    owl:priorVersion                                        <https://meta.linked.archi/core/0.7.0#> ;
     skos:historyNote                                        '''0.7.0 — a dependency type of the core's own.
 arch:DependsOn, with its predicate arch:dependsOn and the inverse arch:dependencyOf: from a model
 concept to one it needs, so that a change to the second may affect the first. Like the core's other
@@ -2765,4 +2765,34 @@ rendering, and context-aware palette generation. Includes:
     a               skos:Concept ;
     skos:prefLabel  "MetamodelingCategory"@en ;
     skos:definition '''Category for concepts that define the modeling language itself — metamodels, viewpoints, and rules.'''@en ;
+.
+#################################################################
+# Metamodel presentation annotations (PD-09/17; Studio A4)
+# Section membership and ordering use SHACL's own non-validating terms.
+#################################################################
+
+:elementTerm
+    a                    owl:AnnotationProperty ;
+    skos:prefLabel       "element term"@en ;
+    skos:definition      "The singular, language-tagged noun a metamodel uses for an element in a modelling tool."@en ;
+    :domainIncludes     :Metamodel ;
+    :rangeIncludes      rdf:langString ;
+    skos:scopeNote       "One value per language on the arch:Metamodel individual. Use elementTermPlural for the plural; consumers must not derive it by appending a suffix."@en ;
+.
+
+:elementTermPlural
+    a                    owl:AnnotationProperty ;
+    skos:prefLabel       "plural element term"@en ;
+    skos:definition      "The plural, language-tagged noun a metamodel uses for elements in a modelling tool."@en ;
+    :domainIncludes     :Metamodel ;
+    :rangeIncludes      rdf:langString ;
+.
+
+:completenessWeight
+    a                    owl:AnnotationProperty ;
+    skos:prefLabel       "completeness weight"@en ;
+    skos:definition      "The non-negative decimal weight of a property shape in a presence completeness score."@en ;
+    :domainIncludes     sh:PropertyShape ;
+    :rangeIncludes      xsd:decimal ;
+    skos:scopeNote       "Absent or zero weights do not contribute. A positive weight contributes once when the path has at least one non-blank value. Divide the sum of present weights by the sum of applicable positive weights. With no positive weights the score is unavailable. This measures presence, not SHACL conformance or architectural quality; validation is reported separately."@en ;
 .

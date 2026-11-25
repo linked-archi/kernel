@@ -53,7 +53,7 @@ types already.'''@en ;
                                   <https://pubs.opengroup.org/architecture/archimate4-doc/chap09.html>,
                                   <https://pubs.opengroup.org/architecture/archimate4-doc/chap10.html> ;
     dcterms:created               "2026-04-19"^^xsd:date ;
-    dcterms:modified              "2026-11-06"^^xsd:date ;
+    dcterms:modified              "2026-11-24"^^xsd:date ;
     dcterms:publisher                  "Linked.Archi"@en, <https://linked.archi> ;
     bibo:status                   "draft" ;
     owl:versionIRI                <https://meta.linked.archi/archimate4/element-shapes/4.0#> ;
@@ -117,6 +117,10 @@ notations in a merged graph.'''@en ;
                    am4:CompositeElement ;
     sh:property [
         sh:path        skos:prefLabel ;
+        sh:name        "Name"@en ;
+        sh:group       :Overview ;
+        sh:order       1 ;
+        arch:completenessWeight 1.0 ;
         sh:minCount    1 ;
         sh:datatype    rdf:langString ;
         sh:message     '''Every ArchiMate element instance must have at least one
@@ -335,4 +339,19 @@ are exempt — they are connectors and are conventionally unnamed.'''@en ;
             }
         """ ;
     ] ;
+.
+
+# SHACL presentation metadata is not a new model constraint. The definition
+# contributes to presence completeness, but remains optional (S01).
+:Overview a sh:PropertyGroup ; rdfs:label "Overview"@en ; sh:order 1 .
+:Documentation a sh:PropertyGroup ; rdfs:label "Documentation"@en ; sh:order 2 .
+
+:ArchiMateElementShape sh:property :DefinitionField .
+:DefinitionField
+    a sh:PropertyShape ;
+    sh:path skos:definition ;
+    sh:name "Definition"@en ;
+    sh:group :Documentation ;
+    sh:order 1 ;
+    arch:completenessWeight 1.0 ;
 .

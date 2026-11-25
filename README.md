@@ -17,16 +17,16 @@ decision PD-14).
 
 ## Status
 
-**Both applications consume the same qualified source package.** The 2026-11-24 check passed typecheck and
-839 tests across 52 files. la-gram's migration builds web, desktop and CLI against the installed package and passes
-its browser suite. The workspace's browser test verifies complete RDF handoff and a canvas edit in la-gram.
+**Both applications consume the same qualified source package.** The 2026-11-25 check passed typecheck and
+840 tests across 52 files. la-gram's migration builds web, desktop and CLI against the installed package and passes
+its browser suite. The workspace's browser test verifies complete RDF handoff and canvas edits in la-gram with ArchiMate 4.0 and 3.2.
 
 - **Source:** model modules and assets are maintained here; la-gram holds no independent implementation.
 - **App-dependent tests:** 14 integration tests and their Basic fixture remain in la-gram's `src/__tests__/kernel/`.
 - **History:** historical import is still tracked in `.agents/tasks/import-from-la-gram/`.
 - **Public API:** provisional until K02. Application sessions live in their consumers. Neutral `metamodel-manager/property-shapes.ts` and
   `model-manager/resource-edits.ts` provide reusable SHACL descriptors and RDF edits.
-- **Acceptance:** the broader two-tool gate still needs ArchiMate 3.2 and a Studio-generated extension. Local RDF
+- **Acceptance:** the broader two-tool gate still needs a Studio-generated extension and the remaining workspace acceptance cases. Local RDF
   handoff does not establish shared versioned persistence or live collaboration.
 
 | To read | Where |
@@ -49,7 +49,7 @@ import { diffModels } from '@linked-archi/kernel/model-manager/model-diff.js'; /
 Until K02 publishes a version, a consumer installs the tarball `npm pack` makes here:
 
 ```json
-"@linked-archi/kernel": "file:vendor/linked-archi-kernel-0.1.1.tgz"
+"@linked-archi/kernel": "file:vendor/linked-archi-kernel-0.1.2.tgz"
 ```
 
 **Do not link the folder** (`file:../linked-archi-kernel`). The link brings this repository's own `node_modules/`,
@@ -61,7 +61,7 @@ The package is TypeScript, so each tool compiles it:
 | Tool | Setting |
 |---|---|
 | Vitest | `test.server.deps.inline: ['@linked-archi/kernel']`, or Node is asked to load `.ts` |
-| Vite | `optimizeDeps.exclude: ['@linked-archi/kernel']`, so its worker and asset URLs are not pre-bundled away |
+| Vite | `optimizeDeps.exclude: ['@linked-archi/kernel', 'oxigraph']`, so the worker and asset URLs are not pre-bundled away, **and** `optimizeDeps.include: ['@linked-archi/kernel > n3', '@linked-archi/kernel > rdf-validate-shacl', '@linked-archi/kernel > rdf-validate-shacl > rdf-literal', '@linked-archi/kernel > rdf-validate-shacl > debug']`. Without the include, the dev server sends the CommonJS libraries the kernel uses unconverted, and the page fails with *does not provide an export named 'fromRdf'*. Production builds are not affected |
 | webpack | let `ts-loader` compile it in `node_modules`: `allowTsInNodeModules`, and an `exclude` that spares it |
 | A Node command-line bundle | bundle the kernel, rather than leaving it an external import |
 

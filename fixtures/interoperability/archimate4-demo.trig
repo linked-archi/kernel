@@ -11,7 +11,7 @@
 
 mg:model {
 m:model a arch:Model;
-    skos:editorialNote "Gift wrapping is realized by nothing on purpose: the documentation's Validation screenshot shows the ServiceWithoutRealizationShape warning it raises."@en;
+    skos:editorialNote "Canonical interoperability fixture: Payments also realizes Gift wrapping; the three single-provider service findings are informational."@en;
     skos:prefLabel "Acme online shop"@en;
     arch:modelConformsToMetamodel am4mm:ArchiMate4
 }

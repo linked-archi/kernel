@@ -39,7 +39,7 @@ viewpoints, and future SHACL shapes — into a single arch:Metamodel instance.
 This is the entry point for tools that need to discover all resources that make up
 the ArchiMate 4.0 modeling language definition.'''@en ;
     dcterms:created               "2026-04-19"^^xsd:date ;
-    dcterms:modified              "2026-04-29"^^xsd:date ;
+    dcterms:modified              "2026-11-24"^^xsd:date ;
     dcterms:publisher                  "Linked.Archi"@en, <https://linked.archi> ;
     bibo:status                   "draft" ;
     owl:versionIRI                <https://meta.linked.archi/archimate4/metamodel/4.0#> ;
@@ -176,3 +176,6 @@ into a single discoverable resource.'''@en ;
     ## File: archimate4-notation.ttl
     arch:notationSet              am4not:ArchiMate40StandardNotation ;
 .
+
+# The UI noun is metamodel data, independent of screen layout (S01).
+:ArchiMate4 arch:elementTerm "Element"@en ; arch:elementTermPlural "Elements"@en .

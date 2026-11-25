@@ -4,6 +4,22 @@
 
 ---
 
+## S01 presentation contract — 2026-11-25
+
+- [x] Sync the four source assets from linked-archi-meta commit `0a9d774` (core 0.8.0, core shapes 0.5.0 and
+  ArchiMate 4.0).
+- [x] Read sections and field order independently. Preserve inherited presentation metadata and disclose
+  conflicts. Resolve localised element terms from the loaded manifests and calculate optional completeness
+  by property path. The untyped resource case returns no type-specific descriptors.
+- [x] Typecheck and 52 files / 840 tests passed, including the timing project. Earlier timing overruns were
+  reproduced on the prior commit under the same machine load. No timing criteria changed.
+- [x] Pack 0.1.2. Both consumers verified its matching lockfile integrity and SHA-256
+  `fa5e5d9a682061fc32e782892b7afeb9b2d36773cd38f3eea48a97f1c15d0a96`.
+
+The default interoperability fixture documents the qualified Payments → Gift wrapping relation. Its three
+informational findings stay pinned. The source package keeps neutral metadata and RDF operations. The
+workspace determines how it displays them.
+
 ## Workspace integration verification — 2026-11-24
 
 - [x] Owner step 3: removed the copy-transition section from conventions; README/design/plan describe the installed
