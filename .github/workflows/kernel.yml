@@ -1,0 +1,45 @@
+# The kernel's checks on GitHub Actions (K01): types, the unit tests, and what the package would contain.
+# On every pull request and push to main; by hand from the Actions tab. Publishes nothing and stores no
+# secret: the run's own GITHUB_TOKEN, read-only.
+#
+# The timing tests (src/**/{*-bench,bench-*}.test.ts, vitest's "timing" project) time the machine they
+# run on, and a shared runner's time varies with its neighbours': they run locally (npm test), not here,
+# as in la-gram's workflow.
+#
+# Every action is pinned to a commit, its version beside it; Dependabot proposes the updates
+# (.github/dependabot.yml).
+name: kernel
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# A newer push to the same pull request cancels what is still running; main runs to the end.
+concurrency:
+  group: kernel-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+env:
+  npm_config_audit: "false"
+  npm_config_fund: "false"
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --prefer-offline
+      - run: npm run typecheck
+      - run: npx vitest run --project unit
+      - run: npm run pack:check

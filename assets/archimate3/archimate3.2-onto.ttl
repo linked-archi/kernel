@@ -37,7 +37,7 @@ relationship pattern), and composite/connector concepts as RDF/OWL. Version 3.2 
 the ontology to current Linked.Archi conventions and RDF 1.2 rdf:reifies.'''@en ;
     dcterms:created               "2019-03-17"^^xsd:date ;
     dcterms:issued                "2019-03-17"^^xsd:date ;
-    dcterms:modified              "2026-11-22"^^xsd:date ;
+    dcterms:modified              "2026-11-25"^^xsd:date ;
     dcterms:publisher                  "Linked.Archi"@en,
                                   <https://linked.archi> ;
     bibo:status                   "draft" ;
@@ -300,7 +300,7 @@ or more interests in, or concerns about, the organization and its Enterprise Arc
 efforts to these interests and concerns, stakeholders change, set, and emphasize goals. Stakeholders may also
 influence each other. Examples of stakeholders are the CEO, the board of directors, shareholders, customers,
 business and application architects, but also legislative authorities.'''@en ;
-    arch:prefVisNotation "https://meta.linked.archi/archimate/v3/img/mot_stakeholder.svg" ;
+    arch:prefVisNotation "https://meta.linked.archi/archimate3/icons/stakeholder.svg" ;
 .
 
 :Driver
@@ -313,7 +313,7 @@ define its goals and implement the changes necessary to achieve them.'''@en ;
     skos:scopeNote       '''Drivers may be internal, in which case they are usually associated with a stakeholder,
 and are often called "concerns". Examples of internal drivers are Customer satisfaction and Profitability. Drivers
 of change may also be external; e.g., economic changes or changing legislation.'''@en ;
-    arch:prefVisNotation "https://meta.linked.archi/archimate/v3/img/mot_driver.svg" ;
+    arch:prefVisNotation "https://meta.linked.archi/archimate3/icons/driver.svg" ;
 .
 
 :Assessment
@@ -326,7 +326,7 @@ enterprise with respect to some driver.'''@en ;
     skos:scopeNote       '''An assessment may reveal strengths, weaknesses, opportunities, or threats for some area
 of interest. These need to be addressed by adjusting existing goals or setting new ones, which may trigger changes
 to the Enterprise Architecture.'''@en ;
-    arch:prefVisNotation "https://meta.linked.archi/archimate/v3/img/mot_assesment.svg" ;
+    arch:prefVisNotation "https://meta.linked.archi/archimate3/icons/assessment.svg" ;
 .
 
 :Goal
@@ -338,7 +338,7 @@ to the Enterprise Architecture.'''@en ;
 an organization and its stakeholders.'''@en ;
     skos:scopeNote       '''Goals are generally expressed using qualitative words; e.g., "increase", "improve", or
 "easier". Goals can also be decomposed. Goals are typically used to measure success of an organization.'''@en ;
-    arch:prefVisNotation "https://meta.linked.archi/archimate/v3/img/mot_goal.svg" ;
+    arch:prefVisNotation "https://meta.linked.archi/archimate3/icons/goal.svg" ;
 .
 
 :Outcome
@@ -351,7 +351,7 @@ an organization and its stakeholders.'''@en ;
     skos:scopeNote       '''Outcomes are high-level, business-oriented results produced by capabilities of an
 organization. Outcomes are tangible, possibly quantitative, and time-related, and can be associated with
 assessments.'''@en ;
-    arch:prefVisNotation "https://meta.linked.archi/archimate/v3/img/mot_outcome.svg" ;
+    arch:prefVisNotation "https://meta.linked.archi/archimate3/icons/outcome.svg" ;
 .
 
 :Principle
@@ -364,7 +364,7 @@ architecture.'''@en ;
     skos:scopeNote       '''Principles are strongly related to goals and requirements. A principle defines a general
 property that applies to any system in a certain context. Principles are intended to be more stable than
 requirements.'''@en ;
-    arch:prefVisNotation "https://meta.linked.archi/archimate/v3/img/mot_principle.svg" ;
+    arch:prefVisNotation "https://meta.linked.archi/archimate3/icons/principle.svg" ;
 .
 
 :Requirement
@@ -375,7 +375,7 @@ requirements.'''@en ;
     skos:definition      '''A requirement represents a statement of need that must be met by the architecture.'''@en ;
     skos:scopeNote       '''Requirements model the properties of elements that are needed to achieve the "ends"
 modeled by goals. Requirements represent the "means" to realize goals.'''@en ;
-    arch:prefVisNotation "https://meta.linked.archi/archimate/v3/img/mot_requirement.svg" ;
+    arch:prefVisNotation "https://meta.linked.archi/archimate3/icons/requirement.svg" ;
 .
 
 :Constraint
@@ -388,7 +388,7 @@ goals.'''@en ;
     skos:changeNote      "3.2: Definition improved."@en ;
     skos:scopeNote       '''A constraint does not prescribe intended functionality but imposes a restriction on the
 way the system operates or may be realized.'''@en ;
-    arch:prefVisNotation "https://meta.linked.archi/archimate/v3/img/mot_constraint.svg" ;
+    arch:prefVisNotation "https://meta.linked.archi/archimate3/icons/constraint.svg" ;
 .
 
 :Meaning
@@ -399,7 +399,7 @@ way the system operates or may be realized.'''@en ;
     skos:definition      '''Meaning represents the knowledge or expertise present in, or the interpretation given
 to, a core element in a particular context.'''@en ;
     skos:changeNote      "3.0: Moved from Business Layer to Motivation elements. 3.2: Icon notation changed."@en ;
-    arch:prefVisNotation "https://meta.linked.archi/archimate/v3/img/mot_meaning.svg" ;
+    arch:prefVisNotation "https://meta.linked.archi/archimate3/icons/meaning.svg" ;
 .
 
 :Value
@@ -410,7 +410,7 @@ to, a core element in a particular context.'''@en ;
     skos:definition      '''Value represents the relative worth, utility, or importance of a core element or an
 outcome.'''@en ;
     skos:changeNote      "3.0: Moved from Business Layer to Motivation elements."@en ;
-    arch:prefVisNotation "https://meta.linked.archi/archimate/v3/img/mot_value.svg" ;
+    arch:prefVisNotation "https://meta.linked.archi/archimate3/icons/value.svg" ;
 .
 
 
@@ -442,7 +442,7 @@ organization.'''@en ;
     skos:scopeNote       '''Resources are a central concept in strategic management. They are often considered,
 together with capabilities, to be sources of competitive advantage. Resources can be classified into tangible
 assets, intangible assets, and human assets.'''@en ;
-    arch:prefVisNotation "https://meta.linked.archi/archimate/v3/img/stategy_resource.svg" ;
+    arch:prefVisNotation "https://meta.linked.archi/archimate3/icons/resource.svg" ;
 .
 
 :Capability
@@ -457,7 +457,7 @@ organization, person, or system, possesses.'''@en ;
     skos:scopeNote       '''Capabilities help reduce the gap between strategic goals and implementable architecture
 by focusing on business outcomes. They are typically realized by a combination of organization, people, processes,
 information, and technology.'''@en ;
-    arch:prefVisNotation "https://meta.linked.archi/archimate/v3/img/strategy_capability.svg" ;
+    arch:prefVisNotation "https://meta.linked.archi/archimate3/icons/capability.svg" ;
     rdfs:seeAlso         <https://www.businessarchitectureguild.org/page/002>,
                          <https://pubs.opengroup.org/togaf-standard/business-architecture/business-capabilities.html> ;
 .
@@ -473,7 +473,7 @@ customer, stakeholder, or end user.'''@en ;
     skos:scopeNote       '''A value stream describes how an enterprise organizes its activities to create value.
 Value is always defined from the perspective of the stakeholder. Value streams may be defined at different levels
 of the organization and can be a composition or aggregation of value-adding stages.'''@en ;
-    arch:prefVisNotation "https://meta.linked.archi/archimate/v3/img/strategy_value_stream.svg" ;
+    arch:prefVisNotation "https://meta.linked.archi/archimate3/icons/value-stream.svg" ;
     rdfs:seeAlso         <https://www.businessarchitectureguild.org/page/002>,
                          <https://pubs.opengroup.org/togaf-standard/business-architecture/value-streams.html> ;
 .
@@ -489,7 +489,7 @@ of the enterprise, undertaken to achieve a goal.'''@en ;
     skos:changeNote      "3.0: Introduced as part of the new Strategy layer."@en ;
     skos:scopeNote       '''Courses of action can be categorized as strategies and tactics. Strategies tend to be
 long-term and broad in scope, while tactics tend to be shorter-term and narrower.'''@en ;
-    arch:prefVisNotation "https://meta.linked.archi/archimate/v3/img/strategy_course_of_action.svg" ;
+    arch:prefVisNotation "https://meta.linked.archi/archimate3/icons/course-of-action.svg" ;
 .
 
 
@@ -505,7 +505,7 @@ long-term and broad in scope, while tactics tend to be shorter-term and narrower
     skos:altLabel        "Organization"@en, "Department"@en, "Person"@en ;
     dcterms:source  <https://pubs.opengroup.org/architecture/archimate3-doc/ch-Business-Layer.html#sec-Business-Actor> ;
     skos:definition      '''A business actor is a business entity that is capable of performing behavior.'''@en ;
-    arch:prefVisNotation "https://meta.linked.archi/archimate/v3/img/business_actor.svg" ;
+    arch:prefVisNotation "https://meta.linked.archi/archimate3/icons/business-actor.svg" ;
 .
 
 :BusinessRole
@@ -517,7 +517,7 @@ long-term and broad in scope, while tactics tend to be shorter-term and narrower
     dcterms:source  <https://pubs.opengroup.org/architecture/archimate3-doc/ch-Business-Layer.html#sec-Business-Role> ;
     skos:definition      '''A business role represents the responsibility for performing specific behavior, to which
 an actor can be assigned, or the part an actor plays in a particular action or event.'''@en ;
-    arch:prefVisNotation "https://meta.linked.archi/archimate/v3/img/business_role.svg" ;
+    arch:prefVisNotation "https://meta.linked.archi/archimate3/icons/business-role.svg" ;
 .
 
 :BusinessCollaboration
@@ -528,7 +528,7 @@ an actor can be assigned, or the part an actor plays in a particular action or e
     dcterms:source  <https://pubs.opengroup.org/architecture/archimate3-doc/ch-Business-Layer.html#sec-Business-Collaboration> ;
     skos:definition      '''A business collaboration is an aggregate of two or more business internal active structure
 elements that work together to perform collective behavior.'''@en ;
-    arch:prefVisNotation "https://meta.linked.archi/archimate/v3/img/business_collaboration.svg" ;
+    arch:prefVisNotation "https://meta.linked.archi/archimate3/icons/business-collaboration.svg" ;
 .
 
 :BusinessInterface
@@ -539,7 +539,7 @@ elements that work together to perform collective behavior.'''@en ;
     dcterms:source  <https://pubs.opengroup.org/architecture/archimate3-doc/ch-Business-Layer.html#sec-Business-Interface> ;
     skos:definition      '''A business interface is a point of access where a business service is made available to
 the environment.'''@en ;
-    arch:prefVisNotation "https://meta.linked.archi/archimate/v3/img/business_interface.svg" ;
+    arch:prefVisNotation "https://meta.linked.archi/archimate3/icons/business-interface.svg" ;
 .
 
 :BusinessProcess
@@ -551,7 +551,7 @@ the environment.'''@en ;
     dcterms:source  <https://pubs.opengroup.org/architecture/archimate3-doc/ch-Business-Layer.html#sec-Business-Process> ;
     skos:definition      '''A business process represents a sequence of business behaviors that achieves a specific
 outcome such as a defined set of products or business services.'''@en ;
-    arch:prefVisNotation "https://meta.linked.archi/archimate/v3/img/business_process.svg" ;
+    arch:prefVisNotation "https://meta.linked.archi/archimate3/icons/business-process.svg" ;
 .
 
 :BusinessFunction
@@ -563,7 +563,7 @@ outcome such as a defined set of products or business services.'''@en ;
     dcterms:source  <https://pubs.opengroup.org/architecture/archimate3-doc/ch-Business-Layer.html#sec-Business-Function> ;
     skos:definition      '''A business function is a collection of business behavior based on a chosen set of criteria,
 closely aligned to an organization, but not necessarily explicitly governed by the organization.'''@en ;
-    arch:prefVisNotation "https://meta.linked.archi/archimate/v3/img/business_function.svg" ;
+    arch:prefVisNotation "https://meta.linked.archi/archimate3/icons/business-function.svg" ;
 .
 
 :BusinessInteraction
@@ -574,7 +574,7 @@ closely aligned to an organization, but not necessarily explicitly governed by t
     dcterms:source  <https://pubs.opengroup.org/architecture/archimate3-doc/ch-Business-Layer.html#sec-Business-Interaction> ;
     skos:definition      '''A business interaction is a unit of collective business behavior performed by (a
 collaboration of) two or more business roles.'''@en ;
-    arch:prefVisNotation "https://meta.linked.archi/archimate/v3/img/business_interaction.svg" ;
+    arch:prefVisNotation "https://meta.linked.archi/archimate3/icons/business-interaction.svg" ;
 .
 
 :BusinessEvent
@@ -585,7 +585,7 @@ collaboration of) two or more business roles.'''@en ;
     dcterms:source  <https://pubs.opengroup.org/architecture/archimate3-doc/ch-Business-Layer.html#sec-Business-Event> ;
     skos:definition      '''A business event is a business behavior element that denotes an organizational state
 change.'''@en ;
-    arch:prefVisNotation "https://meta.linked.archi/archimate/v3/img/business_event.svg" ;
+    arch:prefVisNotation "https://meta.linked.archi/archimate3/icons/business-event.svg" ;
 .
 
 :BusinessService
@@ -596,7 +596,7 @@ change.'''@en ;
     skos:altLabel        "Service"@en ;
     dcterms:source  <https://pubs.opengroup.org/architecture/archimate3-doc/ch-Business-Layer.html#sec-Business-Service> ;
     skos:definition      '''A business service represents an explicitly defined exposed business behavior.'''@en ;
-    arch:prefVisNotation "https://meta.linked.archi/archimate/v3/img/business_service.svg" ;
+    arch:prefVisNotation "https://meta.linked.archi/archimate3/icons/business-service.svg" ;
 .
 
 :BusinessObject
@@ -607,7 +607,7 @@ change.'''@en ;
     skos:altLabel        "Information Object"@en ;
     dcterms:source  <https://pubs.opengroup.org/architecture/archimate3-doc/ch-Business-Layer.html#sec-Business-Object> ;
     skos:definition      '''A business object represents a concept used within a particular business domain.'''@en ;
-    arch:prefVisNotation "https://meta.linked.archi/archimate/v3/img/business_object.svg" ;
+    arch:prefVisNotation "https://meta.linked.archi/archimate3/icons/business-object.svg" ;
 .
 
 :Contract
@@ -617,7 +617,7 @@ change.'''@en ;
     dcterms:source  <https://pubs.opengroup.org/architecture/archimate3-doc/ch-Business-Layer.html#sec-Contract> ;
     skos:definition      '''A contract represents a formal or informal specification of an agreement between a
 provider and a consumer that specifies the rights and obligations associated with a product.'''@en ;
-    arch:prefVisNotation "https://meta.linked.archi/archimate/v3/img/business_contract.svg" ;
+    arch:prefVisNotation "https://meta.linked.archi/archimate3/icons/contract.svg" ;
 .
 
 :Representation
@@ -628,7 +628,7 @@ provider and a consumer that specifies the rights and obligations associated wit
     dcterms:source  <https://pubs.opengroup.org/architecture/archimate3-doc/ch-Business-Layer.html#sec-Representation> ;
     skos:definition      '''A representation represents a perceptible form of the information carried by a business
 object.'''@en ;
-    arch:prefVisNotation "https://meta.linked.archi/archimate/v3/img/business_representation.svg" ;
+    arch:prefVisNotation "https://meta.linked.archi/archimate3/icons/representation.svg" ;
 .
 
 :Product
@@ -639,7 +639,7 @@ object.'''@en ;
     dcterms:source  <https://pubs.opengroup.org/architecture/archimate3-doc/ch-Business-Layer.html#sec-Product> ;
     skos:definition      '''A product represents a coherent collection of services and/or passive structure elements,
 accompanied by a contract/set of agreements, which is offered as a whole to customers.'''@en ;
-    arch:prefVisNotation "https://meta.linked.archi/archimate/v3/img/business_product.svg" ;
+    arch:prefVisNotation "https://meta.linked.archi/archimate3/icons/product.svg" ;
 .
 
 
@@ -656,7 +656,7 @@ accompanied by a contract/set of agreements, which is offered as a whole to cust
     dcterms:source  <https://pubs.opengroup.org/architecture/archimate3-doc/ch-Application-Layer.html#sec-Application-Component> ;
     skos:definition      '''An application component represents an encapsulation of application functionality aligned
 to implementation structure, which is modular and replaceable.'''@en ;
-    arch:prefVisNotation "https://meta.linked.archi/archimate/v3/img/app_component.svg" ;
+    arch:prefVisNotation "https://meta.linked.archi/archimate3/icons/application-component.svg" ;
 .
 
 :ApplicationCollaboration
@@ -667,7 +667,7 @@ to implementation structure, which is modular and replaceable.'''@en ;
     dcterms:source  <https://pubs.opengroup.org/architecture/archimate3-doc/ch-Application-Layer.html#sec-Application-Collaboration> ;
     skos:definition      '''An application collaboration represents an aggregate of two or more application components
 that work together to perform collective application behavior.'''@en ;
-    arch:prefVisNotation "https://meta.linked.archi/archimate/v3/img/app_collaboration.svg" ;
+    arch:prefVisNotation "https://meta.linked.archi/archimate3/icons/application-collaboration.svg" ;
 .
 
 :ApplicationInterface
@@ -679,7 +679,7 @@ that work together to perform collective application behavior.'''@en ;
     dcterms:source  <https://pubs.opengroup.org/architecture/archimate3-doc/ch-Application-Layer.html#sec-Application-Interface> ;
     skos:definition      '''An application interface represents a point of access where application services are made
 available to a user, another application component, or a node.'''@en ;
-    arch:prefVisNotation "https://meta.linked.archi/archimate/v3/img/app_interface.svg" ;
+    arch:prefVisNotation "https://meta.linked.archi/archimate3/icons/application-interface.svg" ;
 .
 
 :ApplicationFunction
@@ -691,7 +691,7 @@ available to a user, another application component, or a node.'''@en ;
     dcterms:source  <https://pubs.opengroup.org/architecture/archimate3-doc/ch-Application-Layer.html#sec-Application-Function> ;
     skos:definition      '''An application function represents automated behavior that can be performed by an
 application component.'''@en ;
-    arch:prefVisNotation "https://meta.linked.archi/archimate/v3/img/app_function.svg" ;
+    arch:prefVisNotation "https://meta.linked.archi/archimate3/icons/application-function.svg" ;
 .
 
 :ApplicationInteraction
@@ -702,7 +702,7 @@ application component.'''@en ;
     dcterms:source  <https://pubs.opengroup.org/architecture/archimate3-doc/ch-Application-Layer.html#sec-Application-Interaction> ;
     skos:definition      '''An application interaction represents a unit of collective application behavior performed
 by (a collaboration of) two or more application components.'''@en ;
-    arch:prefVisNotation "https://meta.linked.archi/archimate/v3/img/app_interaction.svg" ;
+    arch:prefVisNotation "https://meta.linked.archi/archimate3/icons/application-interaction.svg" ;
 .
 
 :ApplicationProcess
@@ -715,7 +715,7 @@ by (a collaboration of) two or more application components.'''@en ;
     skos:definition      '''An application process represents a sequence of application behaviors that achieves a
 specific outcome.'''@en ;
     skos:changeNote      "3.0: Introduced to increase regularity across layers."@en ;
-    arch:prefVisNotation "https://meta.linked.archi/archimate/v3/img/app_process.svg" ;
+    arch:prefVisNotation "https://meta.linked.archi/archimate3/icons/application-process.svg" ;
 .
 
 :ApplicationEvent
@@ -725,7 +725,7 @@ specific outcome.'''@en ;
     skos:prefLabel       "Application Event"@en ;
     dcterms:source  <https://pubs.opengroup.org/architecture/archimate3-doc/ch-Application-Layer.html#sec-Application-Event> ;
     skos:definition      '''An application event is an application behavior element that denotes a state change.'''@en ;
-    arch:prefVisNotation "https://meta.linked.archi/archimate/v3/img/app_event.svg" ;
+    arch:prefVisNotation "https://meta.linked.archi/archimate3/icons/application-event.svg" ;
 .
 
 :ApplicationService
@@ -737,7 +737,7 @@ specific outcome.'''@en ;
     dcterms:source  <https://pubs.opengroup.org/architecture/archimate3-doc/ch-Application-Layer.html#sec-Application-Service> ;
     skos:definition      '''An application service represents an explicitly defined exposed application
 behavior.'''@en ;
-    arch:prefVisNotation "https://meta.linked.archi/archimate/v3/img/app_service.svg" ;
+    arch:prefVisNotation "https://meta.linked.archi/archimate3/icons/application-service.svg" ;
 .
 
 :DataObject
@@ -748,7 +748,7 @@ behavior.'''@en ;
     skos:altLabel        "Data Entity"@en, "Data Asset"@en ;
     dcterms:source  <https://pubs.opengroup.org/architecture/archimate3-doc/ch-Application-Layer.html#sec-Data-Object> ;
     skos:definition      '''A data object represents data structured for automated processing.'''@en ;
-    arch:prefVisNotation "https://meta.linked.archi/archimate/v3/img/app_data_object.svg" ;
+    arch:prefVisNotation "https://meta.linked.archi/archimate3/icons/data-object.svg" ;
 .
 
 
@@ -765,7 +765,7 @@ behavior.'''@en ;
     dcterms:source  <https://pubs.opengroup.org/architecture/archimate3-doc/ch-Technology-Layer.html#sec-Node> ;
     skos:definition      '''A node represents a computational or physical resource that hosts, manipulates, or
 interacts with other computational or physical resources.'''@en ;
-    arch:prefVisNotation "https://meta.linked.archi/archimate/v3/img/tech_node.svg" ;
+    arch:prefVisNotation "https://meta.linked.archi/archimate3/icons/node.svg" ;
 .
 
 :Device
@@ -778,7 +778,7 @@ interacts with other computational or physical resources.'''@en ;
     skos:definition      '''A device is a physical IT resource upon which system software and artifacts may be stored
 or deployed for execution.'''@en ;
     skos:changeNote      "3.2: No longer a subtype of Node; now a subtype of technology internal active structure element, with composition and aggregation relationships to Node."@en ;
-    arch:prefVisNotation "https://meta.linked.archi/archimate/v3/img/tech_device.svg" ;
+    arch:prefVisNotation "https://meta.linked.archi/archimate3/icons/device.svg" ;
 .
 
 :SystemSoftware
@@ -791,7 +791,7 @@ or deployed for execution.'''@en ;
     skos:definition      '''System software represents software that provides or contributes to an environment for
 storing, executing, and using software or data deployed within it.'''@en ;
     skos:changeNote      "3.2: No longer a subtype of Node; now a subtype of technology internal active structure element, with composition and aggregation relationships to Node."@en ;
-    arch:prefVisNotation "https://meta.linked.archi/archimate/v3/img/tech_software.svg" ;
+    arch:prefVisNotation "https://meta.linked.archi/archimate3/icons/system-software.svg" ;
 .
 
 :TechnologyCollaboration
@@ -803,7 +803,7 @@ storing, executing, and using software or data deployed within it.'''@en ;
     skos:definition      '''A technology collaboration represents an aggregate of two or more nodes that work together
 to perform collective technology behavior.'''@en ;
     skos:changeNote      "3.0: Introduced to increase regularity across layers."@en ;
-    arch:prefVisNotation "https://meta.linked.archi/archimate/v3/img/tech_collaboration.svg" ;
+    arch:prefVisNotation "https://meta.linked.archi/archimate3/icons/technology-collaboration.svg" ;
 .
 
 :TechnologyInterface
@@ -814,7 +814,7 @@ to perform collective technology behavior.'''@en ;
     dcterms:source  <https://pubs.opengroup.org/architecture/archimate3-doc/ch-Technology-Layer.html#sec-Technology-Interface> ;
     skos:definition      '''A technology interface represents a point of access where technology services offered by a
 node can be accessed.'''@en ;
-    arch:prefVisNotation "https://meta.linked.archi/archimate/v3/img/tech_interface.svg" ;
+    arch:prefVisNotation "https://meta.linked.archi/archimate3/icons/technology-interface.svg" ;
 .
 
 :Path
@@ -827,7 +827,7 @@ node can be accessed.'''@en ;
     skos:definition      '''A path represents a link between two or more nodes, through which these nodes can exchange
 data or material.'''@en ;
     skos:changeNote      "3.0: Renamed from CommunicationPath; meaning extended to integrate with physical elements."@en ;
-    arch:prefVisNotation "https://meta.linked.archi/archimate/v3/img/tech_path.svg" ;
+    arch:prefVisNotation "https://meta.linked.archi/archimate3/icons/path.svg" ;
 .
 
 :CommunicationNetwork
@@ -840,7 +840,7 @@ data or material.'''@en ;
     skos:definition      '''A communication network represents a set of structures that connects computer systems or
 other electronic devices for transmission, routing, and reception of data.'''@en ;
     skos:changeNote      "3.2: Icon notation changed."@en ;
-    arch:prefVisNotation "https://meta.linked.archi/archimate/v3/img/tech_communication_network.svg" ;
+    arch:prefVisNotation "https://meta.linked.archi/archimate3/icons/communication-network.svg" ;
 .
 
 :TechnologyFunction
@@ -851,7 +851,7 @@ other electronic devices for transmission, routing, and reception of data.'''@en
     dcterms:source  <https://pubs.opengroup.org/architecture/archimate3-doc/ch-Technology-Layer.html#sec-Technology-Function> ;
     skos:definition      '''A technology function represents a collection of technology behavior that can be performed
 by a node.'''@en ;
-    arch:prefVisNotation "https://meta.linked.archi/archimate/v3/img/tech_function.svg" ;
+    arch:prefVisNotation "https://meta.linked.archi/archimate3/icons/technology-function.svg" ;
 .
 
 :TechnologyProcess
@@ -863,7 +863,7 @@ by a node.'''@en ;
     skos:definition      '''A technology process represents a sequence of technology behaviors that achieves a specific
 outcome.'''@en ;
     skos:changeNote      "3.0: Introduced to increase regularity across layers."@en ;
-    arch:prefVisNotation "https://meta.linked.archi/archimate/v3/img/tech_process.svg" ;
+    arch:prefVisNotation "https://meta.linked.archi/archimate3/icons/technology-process.svg" ;
 .
 
 :TechnologyInteraction
@@ -875,7 +875,7 @@ outcome.'''@en ;
     skos:definition      '''A technology interaction represents a unit of collective technology behavior performed by
 (a collaboration of) two or more nodes.'''@en ;
     skos:changeNote      "3.0: Introduced to increase regularity across layers."@en ;
-    arch:prefVisNotation "https://meta.linked.archi/archimate/v3/img/tech_interaction.svg" ;
+    arch:prefVisNotation "https://meta.linked.archi/archimate3/icons/technology-interaction.svg" ;
 .
 
 :TechnologyEvent
@@ -885,7 +885,7 @@ outcome.'''@en ;
     skos:prefLabel       "Technology Event"@en ;
     dcterms:source  <https://pubs.opengroup.org/architecture/archimate3-doc/ch-Technology-Layer.html#sec-Technology-Event> ;
     skos:definition      '''A technology event is a technology behavior element that denotes a state change.'''@en ;
-    arch:prefVisNotation "https://meta.linked.archi/archimate/v3/img/tech_event.svg" ;
+    arch:prefVisNotation "https://meta.linked.archi/archimate3/icons/technology-event.svg" ;
 .
 
 :TechnologyService
@@ -896,7 +896,7 @@ outcome.'''@en ;
     skos:altLabel        "Infrastructure Service"@en ;
     dcterms:source  <https://pubs.opengroup.org/architecture/archimate3-doc/ch-Technology-Layer.html#sec-Technology-Service> ;
     skos:definition      '''A technology service represents an explicitly defined exposed technology behavior.'''@en ;
-    arch:prefVisNotation "https://meta.linked.archi/archimate/v3/img/tech_service.svg" ;
+    arch:prefVisNotation "https://meta.linked.archi/archimate3/icons/technology-service.svg" ;
 .
 
 :Artifact
@@ -908,7 +908,7 @@ outcome.'''@en ;
     dcterms:source  <https://pubs.opengroup.org/architecture/archimate3-doc/ch-Technology-Layer.html#sec-Artifact> ;
     skos:definition      '''An artifact represents a piece of data that is used or produced in a software development
 process, or by deployment and operation of an IT system.'''@en ;
-    arch:prefVisNotation "https://meta.linked.archi/archimate/v3/img/tech_artifact.svg" ;
+    arch:prefVisNotation "https://meta.linked.archi/archimate3/icons/artifact.svg" ;
 .
 
 #################################################################
@@ -925,7 +925,7 @@ process, or by deployment and operation of an IT system.'''@en ;
     skos:definition      '''Equipment represents one or more physical machines, tools, or instruments that can create,
 use, store, move, or transform materials.'''@en ;
     skos:changeNote      "3.0: Introduced with the physical elements, an extension of the Technology Layer. 3.2: No longer a subtype of Node; now a subtype of technology internal active structure element, with composition and aggregation relationships to Node."@en ;
-    arch:prefVisNotation "https://meta.linked.archi/archimate/v3/img/tech_equipment.svg" ;
+    arch:prefVisNotation "https://meta.linked.archi/archimate3/icons/equipment.svg" ;
 .
 
 :Facility
@@ -937,7 +937,7 @@ use, store, move, or transform materials.'''@en ;
     dcterms:source  <https://pubs.opengroup.org/architecture/archimate3-doc/ch-Technology-Layer.html#sec-Facility> ;
     skos:definition      '''A facility represents a physical structure or environment.'''@en ;
     skos:changeNote      "3.0: Introduced with the physical elements, an extension of the Technology Layer. 3.2: No longer a subtype of Node; now a subtype of technology internal active structure element, with composition and aggregation relationships to Node."@en ;
-    arch:prefVisNotation "https://meta.linked.archi/archimate/v3/img/tech_facility.svg" ;
+    arch:prefVisNotation "https://meta.linked.archi/archimate3/icons/facility.svg" ;
 .
 
 :DistributionNetwork
@@ -949,7 +949,7 @@ use, store, move, or transform materials.'''@en ;
     skos:definition      '''A distribution network represents a physical network used to transport materials or
 energy.'''@en ;
     skos:changeNote      "3.0: Introduced with the physical elements, an extension of the Technology Layer."@en ;
-    arch:prefVisNotation "https://meta.linked.archi/archimate/v3/img/tech_distribution_network.svg" ;
+    arch:prefVisNotation "https://meta.linked.archi/archimate3/icons/distribution-network.svg" ;
 .
 
 :Material
@@ -960,7 +960,7 @@ energy.'''@en ;
     dcterms:source  <https://pubs.opengroup.org/architecture/archimate3-doc/ch-Technology-Layer.html#sec-Material> ;
     skos:definition      '''Material represents tangible physical matter or physical elements.'''@en ;
     skos:changeNote      "3.0: Introduced with the physical elements, an extension of the Technology Layer. 3.2: Realization from Material to Equipment added."@en ;
-    arch:prefVisNotation "https://meta.linked.archi/archimate/v3/img/tech_material.svg" ;
+    arch:prefVisNotation "https://meta.linked.archi/archimate3/icons/material.svg" ;
 .
 
 
@@ -977,7 +977,7 @@ energy.'''@en ;
     dcterms:source  <https://pubs.opengroup.org/architecture/archimate3-doc/ch-Implementation-and-Migration-Layer.html#sec-Work-Package> ;
     skos:definition      '''A work package represents a series of actions identified and designed to achieve specific
 results within specified time and resource constraints.'''@en ;
-    arch:prefVisNotation "https://meta.linked.archi/archimate/v3/img/impl_work_package.svg" ;
+    arch:prefVisNotation "https://meta.linked.archi/archimate3/icons/work-package.svg" ;
 .
 
 :Deliverable
@@ -987,7 +987,7 @@ results within specified time and resource constraints.'''@en ;
     skos:prefLabel       "Deliverable"@en ;
     dcterms:source  <https://pubs.opengroup.org/architecture/archimate3-doc/ch-Implementation-and-Migration-Layer.html#sec-Deliverable> ;
     skos:definition      '''A deliverable represents a precisely-defined outcome of a work package.'''@en ;
-    arch:prefVisNotation "https://meta.linked.archi/archimate/v3/img/impl_deliverable.svg" ;
+    arch:prefVisNotation "https://meta.linked.archi/archimate3/icons/deliverable.svg" ;
 .
 
 :ImplementationEvent
@@ -998,7 +998,7 @@ results within specified time and resource constraints.'''@en ;
     dcterms:source  <https://pubs.opengroup.org/architecture/archimate3-doc/ch-Implementation-and-Migration-Layer.html#sec-Implementation-Event> ;
     skos:definition      '''An implementation event is a behavior element that denotes a state change related to
 implementation or migration.'''@en ;
-    arch:prefVisNotation "https://meta.linked.archi/archimate/v3/img/impl_event.svg" ;
+    arch:prefVisNotation "https://meta.linked.archi/archimate3/icons/implementation-event.svg" ;
 .
 
 :Plateau
@@ -1010,7 +1010,7 @@ implementation or migration.'''@en ;
     dcterms:source  <https://pubs.opengroup.org/architecture/archimate3-doc/ch-Implementation-and-Migration-Layer.html#sec-Plateau> ;
     skos:definition      '''A plateau represents a relatively stable state of the architecture that exists during a
 limited period of time.'''@en ;
-    arch:prefVisNotation "https://meta.linked.archi/archimate/v3/img/impl_plateau.svg" ;
+    arch:prefVisNotation "https://meta.linked.archi/archimate3/icons/plateau.svg" ;
 .
 
 :Gap
@@ -1020,7 +1020,7 @@ limited period of time.'''@en ;
     skos:prefLabel       "Gap"@en ;
     dcterms:source  <https://pubs.opengroup.org/architecture/archimate3-doc/ch-Implementation-and-Migration-Layer.html#sec-Gap> ;
     skos:definition      '''A gap represents a statement of difference between two plateaus.'''@en ;
-    arch:prefVisNotation "https://meta.linked.archi/archimate/v3/img/impl_gap.svg" ;
+    arch:prefVisNotation "https://meta.linked.archi/archimate3/icons/gap.svg" ;
 .
 
 #################################################################
@@ -1034,7 +1034,7 @@ limited period of time.'''@en ;
     dcterms:source  <https://pubs.opengroup.org/architecture/archimate3-doc/ch-Generic-Metamodel.html#sec-Grouping> ;
     skos:definition      '''The grouping element aggregates or composes concepts that belong together based on some
 common characteristic.'''@en ;
-    arch:prefVisNotation "https://meta.linked.archi/archimate/v3/img/grouping.svg" ;
+    arch:prefVisNotation "https://meta.linked.archi/archimate3/icons/grouping.svg" ;
 .
 
 :Location
@@ -1045,7 +1045,7 @@ common characteristic.'''@en ;
     skos:definition      '''A location is a place or position where structure elements can be located or behavior can
 be performed.'''@en ;
     skos:changeNote      "3.0: Moved from Business Layer to generic metamodel."@en ;
-    arch:prefVisNotation "https://meta.linked.archi/archimate/v3/img/location.svg" ;
+    arch:prefVisNotation "https://meta.linked.archi/archimate3/icons/location.svg" ;
 .
 
 #################################################################
@@ -1095,7 +1095,6 @@ be satisfied.'''@en ;
     dcterms:source  <https://pubs.opengroup.org/architecture/archimate3-doc/ch-Relationships-and-Relationship-Connectors.html#sec-Composition-Relationship> ;
     skos:definition      '''A composition relationship indicates that an element consists of one or more other
 elements. The contained element exists only within the context of the container.'''@en ;
-    arch:prefVisNotation "https://meta.linked.archi/archimate/v3/img/rel_composition.svg" ;
 .
 
 :qualifiedComposition
@@ -1133,7 +1132,6 @@ ex:qr-001 a am:Composition ;
     dcterms:source  <https://pubs.opengroup.org/architecture/archimate3-doc/ch-Relationships-and-Relationship-Connectors.html#sec-Aggregation-Relationship> ;
     skos:definition      '''An aggregation relationship indicates that an element combines one or more other elements.
 Unlike composition, the aggregated element can exist independently.'''@en ;
-    arch:prefVisNotation "https://meta.linked.archi/archimate/v3/img/rel_aggregation.svg" ;
 .
 
 :qualifiedAggregation
@@ -1172,7 +1170,6 @@ execution.'''@en ;
     dcterms:source  <https://pubs.opengroup.org/architecture/archimate3-doc/ch-Relationships-and-Relationship-Connectors.html#sec-Assignment-Relationship> ;
     skos:definition      '''An assignment relationship indicates the allocation of responsibility, performance of
 behavior, storage, or execution.'''@en ;
-    arch:prefVisNotation "https://meta.linked.archi/archimate/v3/img/rel_assignment.svg" ;
 .
 
 :qualifiedAssignment
@@ -1211,7 +1208,6 @@ or operation of a more abstract entity.'''@en ;
     dcterms:source  <https://pubs.opengroup.org/architecture/archimate3-doc/ch-Relationships-and-Relationship-Connectors.html#sec-Realization-Relationship> ;
     skos:definition      '''A realization relationship indicates that an entity plays a critical role in the creation,
 achievement, sustenance, or operation of a more abstract entity.'''@en ;
-    arch:prefVisNotation "https://meta.linked.archi/archimate/v3/img/rel_realization.svg" ;
 .
 
 :qualifiedRealization
@@ -1259,7 +1255,6 @@ core's dependencies (DD-44).'''@en ;
     skos:definition      '''A serving relationship indicates that an element provides its functionality to another
 element.'''@en ;
     skos:changeNote      "3.0: Renamed from 'Used By'. Cross-layer relationship constraints relaxed."@en ;
-    arch:prefVisNotation "https://meta.linked.archi/archimate/v3/img/rel_serving.svg" ;
 .
 
 :qualifiedServing
@@ -1299,7 +1294,6 @@ ex:qr-005 a am:Serving ;
     skos:definition      '''An access relationship indicates that a behavior element may access a business or data
 object. Its subclasses say the kind of access — am:ReadAccess, am:WriteAccess, am:ReadWriteAccess; an
 am:Access that is none of them is unspecified.'''@en ;
-    arch:prefVisNotation "https://meta.linked.archi/archimate/v3/img/rel_access.svg" ;
 .
 
 :ReadAccess
@@ -1372,7 +1366,6 @@ element.'''@en ;
     dcterms:source  <https://pubs.opengroup.org/architecture/archimate3-doc/ch-Relationships-and-Relationship-Connectors.html#sec-Influence-Relationship> ;
     skos:definition      '''An influence relationship indicates that an element affects the implementation or
 achievement of some motivation element. The influenceStrength property specifies the degree.'''@en ;
-    arch:prefVisNotation "https://meta.linked.archi/archimate/v3/img/rel_influence.svg" ;
 .
 
 :qualifiedInfluence
@@ -1415,7 +1408,6 @@ ex:qr-007 a am:Influence ;
     dcterms:source  <https://pubs.opengroup.org/architecture/archimate3-doc/ch-Relationships-and-Relationship-Connectors.html#sec-Triggering-Relationship> ;
     skos:definition      '''A triggering relationship indicates a temporal or causal relationship between
 elements.'''@en ;
-    arch:prefVisNotation "https://meta.linked.archi/archimate/v3/img/rel_triggering.svg" ;
 .
 
 :qualifiedTriggering
@@ -1451,7 +1443,6 @@ ex:qr-008 a am:Triggering ;
     skos:notation        "f" ;
     dcterms:source  <https://pubs.opengroup.org/architecture/archimate3-doc/ch-Relationships-and-Relationship-Connectors.html#sec-Flow-Relationship> ;
     skos:definition      '''A flow relationship indicates transfer from one element to another.'''@en ;
-    arch:prefVisNotation "https://meta.linked.archi/archimate/v3/img/rel_flow.svg" ;
 .
 
 :qualifiedFlow
@@ -1493,7 +1484,6 @@ ex:qr-009 a am:Flow ;
     dcterms:source  <https://pubs.opengroup.org/architecture/archimate3-doc/ch-Relationships-and-Relationship-Connectors.html#sec-Specialization-Relationship> ;
     skos:definition      '''A specialization relationship indicates that an element is a particular kind of another
 element.'''@en ;
-    arch:prefVisNotation "https://meta.linked.archi/archimate/v3/img/rel_specialization.svg" ;
 .
 
 :qualifiedSpecialization
@@ -1531,7 +1521,6 @@ ArchiMate relationship.'''@en ;
     dcterms:source  <https://pubs.opengroup.org/architecture/archimate3-doc/ch-Relationships-and-Relationship-Connectors.html#sec-Association-Relationship> ;
     skos:definition      '''An association relationship indicates an unspecified relationship, or one that is not
 represented by another ArchiMate relationship.'''@en ;
-    arch:prefVisNotation "https://meta.linked.archi/archimate/v3/img/rel_association.svg" ;
 .
 
 :DirectedAssociation

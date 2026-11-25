@@ -2,7 +2,7 @@ import {Parser,DataFactory} from 'n3';
 import type {Quad} from '@rdfjs/types';
 import {expect,it} from 'vitest';
 import {OxigraphRdfStore} from '../../rdf-engine/rdf-store.js';
-import {propertyShapesForType} from '../property-shapes.js';
+import { propertyShapesForNodeShapes, propertyShapesForType } from '../property-shapes.js';
 
 it('reads inherited SHACL sections and constraints without application defaults',async()=>{
   const store=await OxigraphRdfStore.create();
@@ -19,6 +19,83 @@ it('reads inherited SHACL sections and constraints without application defaults'
     expect(fields.find(p=>p.path==='urn:example:mode')?.choices.map(v=>v.value)).toEqual(['a','b']);
     expect(fields.find(p=>p.path==='urn:example:mode')?.group).toBe('');
   }finally{store.dispose();}
+});
+
+it('projects conjunctive references to named and anonymous node shapes', async () => {
+  const store = await OxigraphRdfStore.create();
+  try {
+    store.load(`
+      @prefix ex: <urn:example:> .
+      @prefix sh: <http://www.w3.org/ns/shacl#> .
+      @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+      ex:OwnerShape sh:targetClass ex:Owner ; sh:property [
+        sh:path ex:detail ; sh:node ex:DetailShape,
+          [ sh:and (ex:NameLimit [ sh:class ex:Auxiliary ]) ]
+      ], [ sh:path ex:alternative ; sh:node [ sh:property [ sh:path ex:value ] ] ] .
+      ex:DetailShape sh:class ex:Detail ; sh:nodeKind sh:IRI ;
+        sh:property [ sh:path ex:name ; sh:name "Name"@en, "Nom"@fr ; sh:minCount 1 ; sh:group ex:Names ] .
+      ex:Names rdfs:label "Noms"@fr ; sh:order 0 .
+      ex:NameLimit sh:property [ sh:path ex:name ; sh:maxCount 1 ] .
+    `, { format: 'text/turtle', graph: 'urn:shapes' });
+    const fields = propertyShapesForType(store, 'urn:example:Owner');
+    const details = fields.find(field => field.path === 'urn:example:detail')!;
+    expect(details.nodeShape).toBeUndefined();
+    expect(details.nodeShapes).toHaveLength(2);
+    expect(details.nodeShapes).toEqual(expect.arrayContaining([
+      expect.objectContaining({ termType: 'NamedNode', value: 'urn:example:DetailShape' }),
+      expect.objectContaining({ termType: 'BlankNode' }),
+    ]));
+    const projection = propertyShapesForNodeShapes(store, details.nodeShapes!, 'fr-BE');
+    expect(projection.classIris).toEqual(['urn:example:Auxiliary', 'urn:example:Detail']);
+    expect(projection.unsupported).toEqual([]);
+    expect(projection.fields).toMatchObject([
+      { path: 'urn:example:name', label: 'Nom', group: 'Noms', minCount: 1, maxCount: 1 },
+    ]);
+    const alternative = fields.find(field => field.path === 'urn:example:alternative')!;
+    expect(alternative.nodeShape).toBe(alternative.nodeShapes?.[0].value);
+    expect(propertyShapesForNodeShapes(store, alternative.nodeShapes!).fields.map(field => field.path))
+      .toEqual(['urn:example:value']);
+  } finally {
+    store.dispose();
+  }
+});
+
+it('diagnoses recursive references and complex paths without projecting them as predicate fields', async () => {
+  const store = await OxigraphRdfStore.create();
+  try {
+    store.load(`
+      @prefix ex: <urn:example:> .
+      @prefix sh: <http://www.w3.org/ns/shacl#> .
+      ex:Parent sh:property [ sh:path ex:clean ],
+        [ sh:path ex:child ; sh:node ex:Child ], [ sh:path [ sh:inversePath ex:parent ] ] .
+      ex:Child sh:property [ sh:path ex:parent ; sh:node ex:Parent ] .
+    `, { format: 'text/turtle', graph: 'urn:shapes' });
+    const result = propertyShapesForNodeShapes(store, [DataFactory.namedNode('urn:example:Parent')]);
+    expect(result.unsupported).toEqual(['path', 'recursive-node-shape']);
+    expect(result.fields.map(field => field.path)).toEqual(['urn:example:child', 'urn:example:clean']);
+  } finally {
+    store.dispose();
+  }
+});
+
+it('reports absent or malformed shape references and ignores shapes asserted in the model', async () => {
+  const store = await OxigraphRdfStore.create();
+  try {
+    store.load(`
+      @prefix ex: <urn:example:> .
+      @prefix sh: <http://www.w3.org/ns/shacl#> .
+      ex:Shape sh:and [ <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> ex:ModelOnly ] ;
+        sh:property [ sh:path ex:resource ; sh:node "not a shape" ] .
+    `, { format: 'text/turtle', graph: 'urn:shapes' });
+    store.load(`
+      <urn:example:ModelOnly> <http://www.w3.org/ns/shacl#property> [ <http://www.w3.org/ns/shacl#path> <urn:example:hidden> ] .
+    `, { format: 'text/turtle' });
+    const result = propertyShapesForNodeShapes(store, [DataFactory.namedNode('urn:example:Shape')]);
+    expect(result.unsupported).toEqual(['and', 'missing-node-shape', 'node']);
+    expect(result.fields).toMatchObject([{ path: 'urn:example:resource', unsupported: ['node'] }]);
+  } finally {
+    store.dispose();
+  }
 });
 
 it('orders authored sections independently of field order and reports conflicting orders', async () => {

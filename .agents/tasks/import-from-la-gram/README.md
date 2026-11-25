@@ -6,8 +6,8 @@
 
 - **The files are copied:** 413 of them, byte for byte, from la-gram's working tree on branch `basic-interaction`. Seven were synced again from `pre-release` on 2026-11-23 (`copy-manifest.json`, `syncs`).
   `copy-manifest.json` lists what was adapted (one test) and the 14 tests that stayed in la-gram (KD-4).
-- **The history is not imported yet:** Git does not run on the machine until Apple's command-line developer tools
-  are installed (`xcode-select --install`).
+- **History import is open as of 2026-11-25.** The current kernel branch starts with its own initial commit.
+  Verify the recorded origins in a scratch clone before any change to the branch history.
 
 ## Import the history
 

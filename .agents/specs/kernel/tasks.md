@@ -15,6 +15,10 @@
   The final repack trims one trailing blank line from the browser-tested payload.
 - [x] Recheck against the reviewed meta revision `d46b2c1`. All 272 mapped files match, and the two installed
   consumer archives are byte-identical.
+- [x] Repack from kernel `8893388` and compare to the pinned file in both apps. The SHA-256 above matches.
+  A fresh temporary project installed the archive and Vitest 4.1.12 on Node 26.13.1. The smoke test used the
+  package root, loaded the core and ArchiMate 4.0 assets offline, and read the authored SHACL field sections.
+  `npm ls n3 oxigraph --all` showed one copy of each. Source typecheck and all 841 tests passed again.
 
 ## RDF labels in the draft 0.1.3 package
 
@@ -67,26 +71,19 @@ K02 API publication, or the PD-17 two-tool gate.
   Source declarations include their ambient build types; asset factory accepts optional bundled URL options.
   Both consumers pass typecheck, units, builds, host/modeller browser suites and the bidirectional handoff;
   la-gram-git passes documentation/smoke checks, including an isolated installed package.
-- [ ] E1/A remains open: complete the ArchiMate 3.2 and Studio-generated extension matrix, plus remaining inventory,
-  forms and performance criteria. No gate is inferred from the mocks.
+- [ ] E1/A remains open for the Studio-generated extension and remaining inventory, form and performance criteria.
+  The local ArchiMate 3.2 handoff is covered by the browser evidence.
 
 ## K01 Repository, copy, build, tests
 
-**2026-11-23: synced with la-gram again; checks to run again.**
+**2026-11-25:** the local 0.1.4 checks are recorded above. The original source-history import and clean CI evidence
+are open.
 
 - **First run.** `npm test` passed on 2026-11-21: 49 test files, 47 unit and 2 timing, none failed. It ran before the
   sync below, so it no longer counts.
 - **The sync.** la-gram's changes of 2026-11-21 had reached only some of the copied files. Six files and the new
   `src/storage-scope.ts` were copied from la-gram's `pre-release` branch.
 - **Oxigraph** is pinned at 0.5.11, as la-gram's lock has it. The install had taken 0.5.13.
-
-Next:
-
-1. `npm install`, which replaces Oxigraph 0.5.13 in `node_modules`;
-2. `npm run typecheck`, `npm test`, `npm pack`;
-3. the tarball in an empty project (below);
-4. commit `package-lock.json`;
-5. import the history (`.agents/tasks/import-from-la-gram/`).
 
 - [x] Repository and `.agents` (conventions, requirements, design, plan, tasks), `.kiro` links, README, `AGENTS.md`, `CLAUDE.md` (2026-11-20)
 - [x] Licence: Apache-2.0 (PD-04), `LICENSE` copied from la-gram, `NOTICE` (2026-11-20)
@@ -98,11 +95,12 @@ Next:
 - [x] Synced with la-gram's `pre-release` (2026-11-23): `model-diff.ts`, `model-diff-text.ts`, `provenance.ts`, `version-history.ts`, `build-flags.d.ts`, `model-diff.test.ts`, and `src/storage-scope.ts`, which `version-history.ts` now imports. Every copied file now matches la-gram's, except the one adapted test
 - [x] Oxigraph pinned at `0.5.11` in `package.json` and `package-lock.json`, as la-gram's lock has it (2026-11-23)
 - [x] `npm install` (2026-11-20)
-- [ ] `npm install` again, for Oxigraph 0.5.11; `npm ls oxigraph n3` shows 0.5.11 and 2.13.12, one copy each; commit `package-lock.json`
-- [ ] `npm run typecheck` passes
-- [ ] `npm test` passes: 49 test files, unit then timing. It passed on 2026-11-21, before the sync; run it again
+- [x] `npm ls oxigraph n3` shows 0.5.11 and 2.13.12, one copy each. The lockfile is committed in `8893388`.
+- [x] `npm run typecheck` passes on `8893388`.
+- [x] `npm test` passes on `8893388` (52 files, 841 tests).
 - [ ] History imported, matching the copy file for file (`.agents/tasks/import-from-la-gram/`)
-- [ ] `npm pack` after the sync; the tarball installs in an empty project and `import { rdfEngine } from '@linked-archi/kernel'` runs under Vitest there, with `server.deps.inline: ['@linked-archi/kernel']`
+- [x] `npm pack` and the empty-project Vitest check pass on `8893388`, with the exact consumer archive.
+- [ ] Record the clean GitLab CI run on the qualified revision.
 
 ## Queued for K02
 
@@ -136,6 +134,13 @@ Findings from K01, recorded 2026-11-20, not started:
 
 ## Change log
 
+- **2026-11-25. ArchiMate 3.2's pictures are ones meta.linked.archi serves.**
+  - **Asset:** `archimate3.2-onto.ttl`, refreshed from meta. Its classes named pictures under
+    `https://meta.linked.archi/archimate/v3/img/`, which meta.linked.archi answers 404 for. An element type's is now
+    the one its notation gives, under `archimate3/icons/`, so the two agree; the relationship types name none, as
+    ArchiMate 4's do. The palette's 3.2 relationships, whose notation gives no picture, fell back to those IRIs; they
+    now have no `iconUrl`. No code changed; the tests pass.
+  - **la-gram** has it with the next vendored kernel tarball.
 - **2026-11-23. Synced with la-gram; Oxigraph pinned.**
   - **What had drifted.** la-gram's work of 2026-11-21 (the edit record in the model diff, the Git account in
     provenance, the alpha/release storage channel) had reached eight of the copied files but not six others.

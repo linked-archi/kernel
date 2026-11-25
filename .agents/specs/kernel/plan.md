@@ -23,10 +23,11 @@ records web/desktop/CLI/browser checks and the API inventory. Shared modules are
 repositories. Updates are made here and delivered through a qualified archive and consumer lockfiles.
 The migration task retains explicit closure checks; E1/A remains open for the full metamodel matrix.
 
-## K01 order
+## K01 qualification and remaining work
 
-1. **Copy.** Done 2026-11-20.
-2. **Install, type-check and test.** Fix what fails, here and in la-gram alike if the cause is in the shared code.
-3. **Import the history.** Follow `.agents/tasks/import-from-la-gram/README.md` once Git works on the machine.
-4. **Pack.** Run `npm pack` and install the tarball in an empty project.
-5. **Hand over.** Tell W02 and L01 that the package is usable, as the packed tarball (README, *Use*).
+The source copy, typecheck, tests and packed 0.1.4 consumer checks have passed locally. The tarball from
+kernel `8893388` matches the pin in both consumers, and an empty Vitest project loaded its RDF store and
+bundled assets. The [task log](tasks.md) records the evidence.
+
+The original Git history and clean CI evidence are the remaining K01 items. Use the recorded pre-migration
+source reference for the [history import](../../tasks/import-from-la-gram/README.md).
