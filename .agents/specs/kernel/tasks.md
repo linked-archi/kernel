@@ -4,6 +4,30 @@
 
 ---
 
+## SHACL presentation in the draft 0.1.4 package — 2026-11-25
+
+- [x] Remove the field-presence calculator and its weight vocabulary. Keep tool-neutral SHACL property
+  descriptors, language selection and validation. The descriptor tests cover section order and conflicting orders.
+- [x] Sync the restored core ontology and shapes and the edited default element shapes. The asset check found
+  all 272 mapped files match the meta checkout.
+- [x] Typecheck and 841 tests passed across 52 files. Both apps install the same draft archive with SHA-256
+  `69ec56c0a6fb4b988a5dae789f1f9b041ff3a2b6f08d213f52cbdaf79c136a88`.
+  The final repack trims one trailing blank line from the browser-tested payload.
+- [x] Recheck against the reviewed meta revision `d46b2c1`. All 272 mapped files match, and the two installed
+  consumer archives are byte-identical.
+
+## RDF labels in the draft 0.1.3 package
+
+- [x] Remove the dedicated terminology reader and vocabulary constants. Refresh the three matching semantic
+  assets from the meta working tree.
+- [x] Use a shared language selector for authored model, ontology, taxonomy and property-shape labels. The palette
+  accepts a preferred language. The workspace supplies its locale and la-gram uses the existing English preference.
+- [x] Typecheck and 841 tests passed. A non-ArchiMate metamodel test checks regional and base language selection
+  for ontology types and relationships, and taxonomy axes and groups.
+- [x] Both apps installed the same local archive (SHA-256
+  `f55c045892169290977d990fcd196efdbdd2d2a55f4bc60e02d2957d75aecd98`). Review the working-tree diff
+  before committing or publishing the changes.
+
 ## S01 presentation contract — 2026-11-25
 
 - [x] Sync the four source assets from linked-archi-meta commit `0a9d774` (core 0.8.0, core shapes 0.5.0 and

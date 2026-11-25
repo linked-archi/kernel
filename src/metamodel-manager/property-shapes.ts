@@ -1,7 +1,8 @@
 /** Tool-neutral SHACL property descriptors and S01 presentation metadata (KReq 3). */
 import { DataFactory } from 'n3';
-import type { Literal, NamedNode, Term } from '@rdfjs/types';
+import type { NamedNode, Term } from '@rdfjs/types';
 import type { RdfStore } from '../rdf-engine/interfaces.js';
+import { selectLocalizedLiteral } from '../rdf-engine/localized-text.js';
 import { NAMESPACES } from '../rdf-engine/namespaces.js';
 import { typeClosure, labelOf } from '../model-manager/model-queries.js';
 import { IRI, nn } from '../model-manager/vocabulary.js';
@@ -24,7 +25,6 @@ export interface PropertyShape {
   groupIri?: string;
   groupOrder?: number;
   order?: number;
-  completenessWeight?: number;
   presentationIssues: string[];
   minCount: number;
   maxCount?: number;
@@ -57,17 +57,6 @@ function assetValues(store: RdfStore, subject: Term, predicate: string): Term[] 
     .map(q => q.object);
 }
 
-function localizedText(values: Term[], locale: string): string | undefined {
-  const literals = values.filter((v): v is Literal => v.termType === 'Literal' && !!v.value.trim());
-  const language = locale.toLowerCase();
-  const preferred = [language, language.split('-')[0], 'en', ''];
-  const rank = (literal: Literal) => {
-    const i = preferred.indexOf(literal.language.toLowerCase());
-    return i === -1 ? preferred.length : i;
-  };
-  return literals.sort((a, b) => rank(a) - rank(b) || compareText(a.language, b.language) || compareText(a.value, b.value))[0]?.value;
-}
-
 function compareText(a: string, b: string): number {
   return a < b ? -1 : a > b ? 1 : 0;
 }
@@ -86,26 +75,14 @@ export function comparePropertyShapes(a: PropertyShape, b: PropertyShape): numbe
     || compareText(a.path, b.path);
 }
 
-/** The common terminology for the declared metamodels. An absent or mixed term leaves the fallback to the caller. */
-export function metamodelElementTerms(store: RdfStore, iris: readonly string[], locale = 'en') {
-  const common = (predicate: string) => {
-    const labels = new Set(iris.map(iri => localizedText(
-      assetValues(store, nn(iri), predicate).filter(term => term.termType === 'Literal' && term.language),
-      locale,
-    )));
-    return labels.size === 1 ? labels.values().next().value : undefined;
-  };
-  return { singular: common(IRI.elementTerm), plural: common(IRI.elementTermPlural) };
-}
-
 function single<T>(values: readonly T[]): T | undefined {
   const unique = new Set(values);
   return unique.size === 1 ? unique.values().next().value : undefined;
 }
 
-function numeric(term: Term, decimalOnly = false): number | undefined {
+function numeric(term: Term): number | undefined {
   if (term.termType !== 'Literal') return undefined;
-  if (term.datatype.value !== DECIMAL && (decimalOnly || term.datatype.value !== INTEGER)) return undefined;
+  if (term.datatype.value !== DECIMAL && term.datatype.value !== INTEGER) return undefined;
   const value = Number(term.value);
   return term.value.trim() && Number.isFinite(value) ? value : undefined;
 }
@@ -162,16 +139,12 @@ export function propertyShapesForType(store: RdfStore, type: string, locale = 'e
       if (values.length && result === undefined) presentationIssues.push(property);
       return result;
     };
-    const names = shapes.map(s => localizedText(values(s, SH + 'name'), locale)).filter(v => v !== undefined);
+    const names = shapes.map(s => selectLocalizedLiteral(values(s, SH + 'name'), locale)?.value).filter(v => v !== undefined);
     const groupIri = consistent(declared(SH + 'group').map(t => t.termType === 'NamedNode' ? t.value : undefined), SH + 'group');
     const order = consistent(declared(SH + 'order').map(t => numeric(t)), SH + 'order');
     const groupOrder = groupIri
       ? consistent(values(nn(groupIri), SH + 'order').map(t => numeric(t)), SH + 'order')
       : undefined;
-    const completenessWeight = consistent(declared(IRI.completenessWeight).map(term => {
-      const weight = numeric(term, true);
-      return weight !== undefined && weight >= 0 ? weight : undefined;
-    }), IRI.completenessWeight);
     const max = declared(SH + 'maxCount').map(t => Number(t.value));
     const choiceLists = declared(SH + 'in').map(list);
     const languageLists = declared(SH + 'languageIn').map(list);
@@ -184,11 +157,10 @@ export function propertyShapesForType(store: RdfStore, type: string, locale = 'e
     return {
       path,
       label: consistent(names, SH + 'name') ?? labelOf(store, path, locale),
-      group: groupIri ? localizedText(values(nn(groupIri), IRI.rdfsLabel), locale) ?? labelOf(store, groupIri, locale) : '',
+      group: groupIri ? selectLocalizedLiteral(values(nn(groupIri), IRI.rdfsLabel), locale)?.value ?? labelOf(store, groupIri, locale) : '',
       groupIri,
       groupOrder,
       order,
-      completenessWeight,
       presentationIssues,
       minCount: Math.max(0, ...declared(SH + 'minCount').map(t => Number(t.value))),
       maxCount: max.length ? Math.min(...max) : undefined,
@@ -201,24 +173,4 @@ export function propertyShapesForType(store: RdfStore, type: string, locale = 'e
       unsupported,
     };
   }).sort(comparePropertyShapes);
-}
-
-/** Presence is independent of SHACL validation. A weighted value counts once per path. */
-export function propertyCompleteness(fields: readonly PropertyShape[], values: (path: string) => readonly Term[]) {
-  if (fields.some(field => field.presentationIssues.includes(IRI.completenessWeight))) return undefined;
-  const items = fields.filter(field => (field.completenessWeight ?? 0) > 0).map(field => ({
-    path: field.path,
-    label: field.label,
-    weight: field.completenessWeight!,
-    values: values(field.path),
-  }));
-  if (items.some(item => item.values.some(term => term.termType !== 'Literal' && term.termType !== 'NamedNode'))) return undefined;
-  const total = items.reduce((sum, item) => sum + item.weight, 0);
-  if (!total || !Number.isFinite(total)) return undefined;
-  const fieldsWithPresence = items.map(({ values, ...field }) => ({
-    ...field,
-    present: values.some(term => term.termType === 'NamedNode' || !!term.value.trim()),
-  }));
-  const present = fieldsWithPresence.reduce((sum, field) => sum + (field.present ? field.weight : 0), 0);
-  return { percent: Math.round((present / total) * 100), fields: fieldsWithPresence };
 }

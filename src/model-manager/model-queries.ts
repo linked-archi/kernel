@@ -24,6 +24,7 @@
 import { DataFactory } from 'n3';
 import type { NamedNode, Quad, Term } from '@rdfjs/types';
 import type { RdfStore } from '../rdf-engine/interfaces.js';
+import { selectLocalizedLiteral } from '../rdf-engine/localized-text.js';
 import { NAMESPACES } from '../rdf-engine/namespaces.js';
 import type { ViewInfo } from './interfaces.js';
 import { IRI, T, humanize, localName, nn, relationshipClassAmong } from './vocabulary.js';
@@ -164,8 +165,8 @@ export function labelOf(store: RdfStore, iri: string, preferredLanguage = 'en'):
   for (const graph of [MODEL_GRAPH, null]) {
     for (const predicate of NAMING_PREDICATES) {
       const literals = store.getQuads(subject, predicate, null, graph).map((q) => q.object);
-      if (literals.length === 0) continue;
-      return preferredLiteral(literals, preferredLanguage).value;
+      const label = selectLocalizedLiteral(literals, preferredLanguage);
+      if (label) return label.value;
     }
   }
   return humanize(localName(iri));
@@ -182,18 +183,10 @@ export function modelNameOf(store: RdfStore, iri: string, preferredLanguage = 'e
   const subject = nn(iri);
   for (const predicate of NAMING_PREDICATES) {
     const literals = store.getQuads(subject, predicate, null, MODEL_GRAPH).map((q) => q.object);
-    if (literals.length > 0) return preferredLiteral(literals, preferredLanguage).value;
+    const label = selectLocalizedLiteral(literals, preferredLanguage);
+    if (label) return label.value;
   }
   return undefined;
-}
-
-/** Of a name's literals, the one in the preferred language, else one without a language, else the first. */
-function preferredLiteral<T extends { value: string }>(literals: readonly T[], preferredLanguage: string): T {
-  return (
-    literals.find((l) => (l as { language?: string }).language === preferredLanguage) ??
-    literals.find((l) => !(l as { language?: string }).language) ??
-    literals[0]
-  );
 }
 
 /** Whether `iri` has a name of its own, rather than one {@link labelOf} makes from its IRI. */
@@ -273,7 +266,7 @@ function folderLabel(store: RdfStore, iri: string): string {
   const names = SCHEMA_NAME.flatMap((p) => store.getQuads(nn(iri), p, null, MODEL_GRAPH))
     .map((q) => q.object)
     .filter((o) => o.termType === 'Literal');
-  return names.length > 0 ? preferredLiteral(names, 'en').value : labelOf(store, iri);
+  return selectLocalizedLiteral(names)?.value ?? labelOf(store, iri);
 }
 
 /** The model's `arch:Model` resource, if the data declares one. */
@@ -396,11 +389,11 @@ function byLabel(a: ConceptSummary, b: ConceptSummary): number {
 }
 
 /** A cache of type labels, from the store. */
-function typeLabels(store: RdfStore): (typeIri: string) => string {
+function typeLabels(store: RdfStore, preferredLanguage = 'en'): (typeIri: string) => string {
   const labels = new Map<string, string>();
   return (typeIri) => {
     let label = labels.get(typeIri);
-    if (label === undefined) labels.set(typeIri, (label = labelOf(store, typeIri)));
+    if (label === undefined) labels.set(typeIri, (label = labelOf(store, typeIri, preferredLanguage)));
     return label;
   };
 }
@@ -411,7 +404,9 @@ function typeLabels(store: RdfStore): (typeIri: string) => string {
  * @param views The view list, from the view manager, so this module does not
  *   duplicate view reading.
  */
-export function readModelContents(store: RdfStore, views: ViewInfo[], closure: TypeClosure = typeClosure(store)): ModelContents {
+export function readModelContents(
+  store: RdfStore, views: ViewInfo[], closure: TypeClosure = typeClosure(store), preferredLanguage = 'en',
+): ModelContents {
   // One pass over the model for what the tree shows of each concept — its
   // types, names and ends — rather than a query a concept (Task 22).
   const facts = collectFacts(modelQuads(store));
@@ -420,11 +415,12 @@ export function readModelContents(store: RdfStore, views: ViewInfo[], closure: T
     const names = facts.get(iri)?.names;
     for (const predicate of NAMING_PREDICATES) {
       const literals = names?.get(predicate.value);
-      if (literals && literals.length > 0) return preferredLiteral(literals, 'en').value;
+      const label = selectLocalizedLiteral(literals ?? [], preferredLanguage);
+      if (label) return label.value;
     }
-    return labelOf(store, iri);
+    return labelOf(store, iri, preferredLanguage);
   };
-  const typeLabel = typeLabels(store);
+  const typeLabel = typeLabels(store, preferredLanguage);
   const contents: ModelContents = { views, elements: [], relationships: [], unclassified: [] };
   for (const [iri, f] of facts) {
     const concept = summarize(iri, f, closure, nameOf, typeLabel, store);

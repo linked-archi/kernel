@@ -224,6 +224,28 @@ describe('SparqlPaletteGenerator', () => {
 
   const allElements = (p: PaletteDefinition = palette) => p.elementGroups.flatMap((g) => g.elements);
 
+
+  it('uses the requested RDF language for ontology types, relationships and taxonomy groups', () => {
+    store.load(`
+      @prefix ex: <${EX}> .
+      @prefix skos: <${NAMESPACES.skos}> .
+      ex:ByLayer skos:prefLabel "Couche"@fr .
+      ex:BusinessLayer skos:prefLabel "Couche métier"@fr .
+      ex:Process skos:prefLabel "Processus"@fr .
+      ex:Serving skos:prefLabel "Service rendu"@fr-BE, "Service"@fr .
+    `, { format: 'text/turtle', graph: 'urn:labels' });
+    const localised = generator.generatePalette(ONTOLOGY_IRI, {
+      axisIri: BY_LAYER,
+      preferredLanguage: 'fr-BE',
+    });
+    expect(localised.axes?.find(axis => axis.iri === BY_LAYER)?.label).toBe('Couche');
+    expect(localised.elementGroups.find(group => group.category === 'Couche métier')?.elements
+      .find(element => element.iri === EX + 'Process')?.label).toBe('Processus');
+    expect(allElements(localised).find(element => element.iri === EX + 'Component')?.label)
+      .toBe(allElements().find(element => element.iri === EX + 'Component')?.label);
+    expect(localised.relationshipTypes.find(relation => relation.iri === EX + 'Serving')?.label).toBe('Service rendu');
+  });
+
   describe('element discovery', () => {
     it('says the palette is grouped by the taxonomy', () => {
       expect(palette.grouping).toBe('taxonomy');

@@ -44,13 +44,13 @@ below: requiring skos:prefLabel on every arch:Element is not a sound cross-notat
 because routing and connector constructs are genuine elements that notations permit to be
 unnamed. Naming rules are owned by each metamodel's shapes graph.'''@en ;
     dcterms:created               "2019-03-17"^^xsd:date ;
-    dcterms:modified              "2026-11-24"^^xsd:date ;
+    dcterms:modified              "2026-11-08"^^xsd:date ;
     dcterms:publisher                  "Linked.Archi"@en,
                                   <https://linked.archi> ;
     bibo:status                   "draft" ;
-    owl:versionIRI                <https://meta.linked.archi/core-shapes/0.5.0#> ;
-    owl:versionInfo               "0.5.0"@en ;
-    owl:priorVersion              <https://meta.linked.archi/core-shapes/0.4.0#> ;
+    owl:versionIRI                <https://meta.linked.archi/core-shapes/0.4.0#> ;
+    owl:versionInfo               "0.4.0"@en ;
+    owl:priorVersion              <https://meta.linked.archi/core-shapes/0.3.0#> ;
     skos:historyNote              '''0.2.0 — added archsh:InModelShape and archsh:InViewShape for the
 membership properties introduced in core 0.4.0. Neither shape requires the property; both bound it.'''@en,
                                   '''0.3.0 (2026-11-06) — the five viewpoint conformance shapes moved here
@@ -847,33 +847,4 @@ element's skos:prefLabel — its canonical name, one per language — so it cann
             HAVING (COUNT(DISTINCT ?picture) > 1)
         """ ;
     ] ;
-.
-
-#################################################################
-# Presentation metadata checks. These target authoring assets carrying
-# the annotations, never impose presentation fields on model instances.
-#################################################################
-
-:ElementTerminologyShape
-    a sh:NodeShape ;
-    sh:targetSubjectsOf arch:elementTerm, arch:elementTermPlural ;
-    sh:class arch:Metamodel ;
-    sh:property [ sh:path arch:elementTerm ; sh:datatype rdf:langString ; sh:uniqueLang true ; sh:pattern "\\S" ] ;
-    sh:property [ sh:path arch:elementTermPlural ; sh:datatype rdf:langString ; sh:uniqueLang true ; sh:pattern "\\S" ] ;
-.
-
-:CompletenessWeightShape
-    a sh:NodeShape ;
-    sh:targetSubjectsOf arch:completenessWeight ;
-    sh:property [ sh:path sh:path ; sh:minCount 1 ; sh:maxCount 1 ; sh:nodeKind sh:IRI ] ;
-    sh:property [ sh:path arch:completenessWeight ; sh:datatype xsd:decimal ; sh:minInclusive 0 ; sh:maxCount 1 ] ;
-    sh:property [ sh:path sh:group ; sh:nodeKind sh:IRI ; sh:maxCount 1 ] ;
-.
-
-:PresentationGroupShape
-    a sh:NodeShape ;
-    sh:targetObjectsOf sh:group ;
-    sh:class sh:PropertyGroup ;
-    sh:property [ sh:path rdfs:label ; sh:minCount 1 ; sh:uniqueLang true ; sh:nodeKind sh:Literal ] ;
-    sh:property [ sh:path sh:order ; sh:maxCount 1 ; sh:or ( [ sh:datatype xsd:integer ] [ sh:datatype xsd:decimal ] ) ] ;
 .

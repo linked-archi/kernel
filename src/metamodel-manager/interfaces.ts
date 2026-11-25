@@ -349,6 +349,8 @@ export interface PaletteDefinition {
 
 /** How to build a palette: which axis groups it, which notation styles it. */
 export interface PaletteOptions {
+  /** Preferred language of the authored labels. Defaults to English. */
+  preferredLanguage?: string;
   /**
    * Classification axis to group elements by. Defaults to the taxonomy's
    * preferred (first) axis. Ignored when the metamodel declares no such axis.

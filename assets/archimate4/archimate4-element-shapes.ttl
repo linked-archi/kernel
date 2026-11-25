@@ -120,7 +120,6 @@ notations in a merged graph.'''@en ;
         sh:name        "Name"@en ;
         sh:group       :Overview ;
         sh:order       1 ;
-        arch:completenessWeight 1.0 ;
         sh:minCount    1 ;
         sh:datatype    rdf:langString ;
         sh:message     '''Every ArchiMate element instance must have at least one
@@ -341,8 +340,7 @@ are exempt — they are connectors and are conventionally unnamed.'''@en ;
     ] ;
 .
 
-# SHACL presentation metadata is not a new model constraint. The definition
-# contributes to presence completeness, but remains optional (S01).
+# S01 groups fields for presentation. Definition remains optional.
 :Overview a sh:PropertyGroup ; rdfs:label "Overview"@en ; sh:order 1 .
 :Documentation a sh:PropertyGroup ; rdfs:label "Documentation"@en ; sh:order 2 .
 
@@ -353,5 +351,4 @@ are exempt — they are connectors and are conventionally unnamed.'''@en ;
     sh:name "Definition"@en ;
     sh:group :Documentation ;
     sh:order 1 ;
-    arch:completenessWeight 1.0 ;
 .

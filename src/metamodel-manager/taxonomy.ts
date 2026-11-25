@@ -35,7 +35,8 @@
  * application's `RdfStore` abstraction, so it can be exercised against hand-written Turtle.
  */
 
-import { DataFactory, Store, type Literal, type NamedNode, type Term } from 'n3';
+import { DataFactory, Store, type NamedNode, type Term } from 'n3';
+import { selectLocalizedLiteral } from '../rdf-engine/localized-text.js';
 import { NAMESPACES } from '../rdf-engine/namespaces.js';
 
 const { namedNode } = DataFactory;
@@ -267,7 +268,9 @@ export function paletteGroupingOf(store: Store, metamodelIris: readonly string[]
  *   any metamodel's palette grouping orders the axes, then their labels.
  * @returns The discovered axes, ordered by preference. Empty when no concept scheme is present.
  */
-export function buildClassificationAxes(store: Store, metamodelIris: readonly string[] = []): TaxonomyAxis[] {
+export function buildClassificationAxes(
+  store: Store, metamodelIris: readonly string[] = [], preferredLanguage = 'en',
+): TaxonomyAxis[] {
   // Prefer the scheme(s) the metamodel manifest points at; otherwise take every declared scheme.
   const schemes = new Set<string>();
   for (const quad of store.getQuads(null, namedNode(ARCH_CONCEPT_CLASSIFICATION), null, null)) {
@@ -404,7 +407,7 @@ export function buildClassificationAxes(store: Store, metamodelIris: readonly st
   const isEmptyConcept = (iri: string): boolean => isConcept(iri) && childrenOf(iri).length === 0 && !isMemberLeaf(iri);
   const membersOf = (conceptIri: string): string[] => childrenOf(conceptIri).filter(isMemberLeaf);
 
-  const labelOf = (iri: string): string => labelFor(store, iri) || fragmentToLabel(iriFragment(iri));
+  const labelOf = (iri: string): string => labelFor(store, iri, preferredLanguage);
 
   /** A concept that lists at least one member itself. */
   const isGroup = (iri: string): boolean => isConcept(iri) && membersOf(iri).length > 0;
@@ -643,7 +646,7 @@ export function buildClassificationAxes(store: Store, metamodelIris: readonly st
  * @param axes Axes from {@link buildClassificationAxes}; the first supplies the default group.
  * @returns Palette classes sorted by group then label.
  */
-export function buildClasses(store: Store, axes: TaxonomyAxis[]): SemanticClass[] {
+export function buildClasses(store: Store, axes: TaxonomyAxis[], preferredLanguage = 'en'): SemanticClass[] {
   const allClassIris = new Set<string>();
   for (const term of store.getSubjects(namedNode(RDF_TYPE), namedNode(OWL_CLASS), null)) {
     addNamed(allClassIris, term);
@@ -737,8 +740,8 @@ export function buildClasses(store: Store, axes: TaxonomyAxis[]): SemanticClass[
 
       taxonomyResult.push({
         iri: owlClassIri,
-        label: labelFor(store, memberIri) || labelFor(store, owlClassIri),
-        definition: definitionFor(store, memberIri) || definitionFor(store, owlClassIri),
+        label: labelFor(store, memberIri, preferredLanguage, owlClassIri),
+        definition: definitionFor(store, memberIri, preferredLanguage) ?? definitionFor(store, owlClassIri, preferredLanguage),
         superClasses: superClassMap.get(owlClassIri) ?? [],
         transitiveSuperClasses: closure,
         group: defaultGroup,
@@ -786,8 +789,8 @@ export function buildClasses(store: Store, axes: TaxonomyAxis[]): SemanticClass[
 
       result.push({
         iri,
-        label: labelFor(store, iri),
-        definition: definitionFor(store, iri),
+        label: labelFor(store, iri, preferredLanguage),
+        definition: definitionFor(store, iri, preferredLanguage),
         superClasses: superClassMap.get(iri) ?? [],
         transitiveSuperClasses: closure,
         group: groupFor(iri, closure),
@@ -853,21 +856,24 @@ function groupFor(iri: string, closure: string[]): string {
   return 'Other';
 }
 
-/** Preferred label: `skos:prefLabel`, then `rdfs:label`, then a humanised IRI fragment. */
-function labelFor(store: Store, iri: string): string {
-  return literalFor(store, iri, SKOS_PREF_LABEL) ?? literalFor(store, iri, RDFS_LABEL) ?? fragmentToLabel(iriFragment(iri));
+/** A taxonomy member and its ontology class can each supply a label. */
+function labelFor(store: Store, iri: string, preferredLanguage: string, classIri = iri): string {
+  const subjects = iri === classIri ? [iri] : [iri, classIri];
+  for (const predicate of [SKOS_PREF_LABEL, RDFS_LABEL]) {
+    const terms = subjects.flatMap(subject => store.getObjects(namedNode(subject), namedNode(predicate), null));
+    const literal = selectLocalizedLiteral(terms, preferredLanguage);
+    if (literal) return literal.value;
+  }
+  return fragmentToLabel(iriFragment(classIri));
 }
 
 /** Definition: `skos:definition`, then `rdfs:comment`. */
-function definitionFor(store: Store, iri: string): string | undefined {
-  return literalFor(store, iri, SKOS_DEFINITION) ?? literalFor(store, iri, RDFS_COMMENT);
-}
-
-/** First literal value for subject+predicate, preferring the English one. */
-function literalFor(store: Store, subject: string, predicate: string): string | undefined {
-  const values = store.getObjects(namedNode(subject), namedNode(predicate), null).filter(isLiteral);
-  const en = values.find((term) => term.language === 'en');
-  return (en ?? values[0])?.value;
+function definitionFor(store: Store, iri: string, preferredLanguage: string): string | undefined {
+  for (const predicate of [SKOS_DEFINITION, RDFS_COMMENT]) {
+    const literal = selectLocalizedLiteral(store.getObjects(namedNode(iri), namedNode(predicate), null), preferredLanguage);
+    if (literal) return literal.value;
+  }
+  return undefined;
 }
 
 /** Local name of an IRI: the part after the last `#`, or after the last `/`. */
@@ -891,10 +897,6 @@ function addNamed(set: Set<string>, term: Term): void {
 
 function isNamedNode<T extends Term>(term: T): term is Extract<T, NamedNode> {
   return term.termType === 'NamedNode';
-}
-
-function isLiteral<T extends Term>(term: T): term is Extract<T, Literal> {
-  return term.termType === 'Literal';
 }
 
 function unique<T>(items: T[]): T[] {

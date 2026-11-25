@@ -1,6 +1,6 @@
 {
   "name": "@linked-archi/kernel",
-  "version": "0.1.2",
+  "version": "0.1.4",
   "description": "The Linked.Archi model kernel: metamodel loading, permitted relationships, IRIs, model changes, diff and merge, SHACL validation and canonical Turtle, shared by la-gram and the Linked.Archi workspace.",
   "license": "Apache-2.0",
   "type": "module",

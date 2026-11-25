@@ -74,6 +74,7 @@ import { DataFactory, Store } from 'n3';
 import type { Quad as N3Quad } from 'n3';
 import type { Quad } from '@rdfjs/types';
 import type { RdfStore } from '../rdf-engine/interfaces.js';
+import { selectLocalizedLiteral } from '../rdf-engine/localized-text.js';
 import { NAMESPACES } from '../rdf-engine/namespaces.js';
 import { resolveIconUri } from './bundled-assets.js';
 import {
@@ -175,11 +176,12 @@ export class SparqlPaletteGenerator implements PaletteGenerator {
   generatePalette(metamodelGraph?: string, options?: PaletteOptions): PaletteDefinition {
     const graph = this.snapshot();
 
-    const classificationAxes = buildClassificationAxes(graph, options?.metamodelIris);
+    const preferredLanguage = options?.preferredLanguage ?? 'en';
+    const classificationAxes = buildClassificationAxes(graph, options?.metamodelIris, preferredLanguage);
     // Not the classes of a document that gives no loaded metamodel its types: another version's ontology, loaded
     // because the shapes of both import it (LeanIX v3 beside v4, TOGAF 9.2 beside 10).
     const withoutTypes = options?.metamodels ? documentsWithoutTypes(graph, options.metamodels) : new Set<string>();
-    const semanticClasses = buildClasses(graph, classificationAxes).filter((cls) => declaredOutside(graph, cls.iri, withoutTypes));
+    const semanticClasses = buildClasses(graph, classificationAxes, preferredLanguage).filter((cls) => declaredOutside(graph, cls.iri, withoutTypes));
     // Only an axis that groups some element type is one to group the palette by. A taxonomy may also
     // classify relationship types — ArchiMate's relationship categories — which are not palette elements.
     // A standalone group (ArchiMate's Junction, under no axis) is no way of grouping either: its members take
@@ -220,7 +222,7 @@ export class SparqlPaletteGenerator implements PaletteGenerator {
     const elements = semanticClasses.map((cls) => this.toElementTypeInfo(cls, groupingAxes, standaloneAxes, resolver, otherAxes));
     const elementGroups = this.groupElements(elements, activeAxis, groupingAxes, semanticClasses, otherAxes);
     const relationshipTypes = categoriseRelationships(
-      this.discoverRelationships(graph, resolver, superClassMap).filter((rel) => declaredOutside(graph, rel.iri, withoutTypes)),
+      this.discoverRelationships(graph, resolver, superClassMap, preferredLanguage).filter((rel) => declaredOutside(graph, rel.iri, withoutTypes)),
       classificationAxes,
       superClassMap,
       graph,
@@ -499,6 +501,7 @@ export class SparqlPaletteGenerator implements PaletteGenerator {
     graph: Store,
     resolver: NotationResolver,
     superClassMap: Map<string, string[]>,
+    preferredLanguage: string,
   ): RelationshipTypeInfo[] {
     const candidates = new Set<string>();
     for (const [iri, supers] of superClassMap) {
@@ -538,7 +541,7 @@ export class SparqlPaletteGenerator implements PaletteGenerator {
 
       relationships.push({
         iri,
-        label: labelFor(graph, iri),
+        label: labelFor(graph, iri, preferredLanguage),
         definition: definitionFor(graph, iri),
         iconUrl: prefVisNotation?.url,
         prefVisNotation,
@@ -691,15 +694,11 @@ function objectValues(graph: Store, subjectIri: string, predicate: string): stri
     .map((term) => term.value);
 }
 
-/** Preferred label: English `skos:prefLabel`, any `skos:prefLabel`, `rdfs:label`, else the IRI fragment. */
-function labelFor(graph: Store, iri: string): string {
+/** Preferred RDF label, or the IRI fragment if the asset provides none. */
+function labelFor(graph: Store, iri: string, preferredLanguage: string): string {
   for (const predicate of [SKOS_PREF_LABEL, RDFS_LABEL]) {
-    const literals = graph
-      .getObjects(namedNode(iri), namedNode(predicate), null)
-      .filter((term) => term.termType === 'Literal');
-    const english = literals.find((term) => 'language' in term && term.language === 'en');
-    const chosen = english ?? literals[0];
-    if (chosen) return chosen.value;
+    const literal = selectLocalizedLiteral(graph.getObjects(namedNode(iri), namedNode(predicate), null), preferredLanguage);
+    if (literal) return literal.value;
   }
   return fragmentToLabel(iriFragment(iri));
 }

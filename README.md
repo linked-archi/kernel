@@ -3,7 +3,7 @@
 `@linked-archi/kernel`: the model logic shared by [la-gram](../../modellers/la-gram/README.md) and the Linked.Archi
 workspace. It covers:
 
-- loading Linked.Archi metamodels;
+- loading Linked.Archi metamodels and selecting language-tagged labels from ontologies and taxonomies;
 - deciding which relationships the shapes permit;
 - minting IRIs;
 - creating, changing and deleting elements, relationships and views with exactly the triples la-gram writes;
@@ -49,7 +49,7 @@ import { diffModels } from '@linked-archi/kernel/model-manager/model-diff.js'; /
 Until K02 publishes a version, a consumer installs the tarball `npm pack` makes here:
 
 ```json
-"@linked-archi/kernel": "file:vendor/linked-archi-kernel-0.1.2.tgz"
+"@linked-archi/kernel": "file:vendor/linked-archi-kernel-0.1.4.tgz"
 ```
 
 **Do not link the folder** (`file:../linked-archi-kernel`). The link brings this repository's own `node_modules/`,
