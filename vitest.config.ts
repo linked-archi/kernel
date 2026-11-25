@@ -10,6 +10,11 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'node',
+    // la-gram's timeout, for the same reason: Vitest's 5 s is too little on a shared CI runner, where every test
+    // file runs beside the others on two cores. On 2026-11-25 a merge property test (model-merge.property.test.ts)
+    // took 0.7 s in the full run on a developer's machine and 6.9 s on GitHub's runner. A test that hangs still
+    // fails.
+    testTimeout: 20_000,
     projects: [
       {
         extends: true,

@@ -134,6 +134,13 @@ Findings from K01, recorded 2026-11-20, not started:
 
 ## Change log
 
+- **2026-11-25. On GitHub, with la-gram's test timeout.**
+  - **Repository:** <https://github.com/linked-archi/kernel>, public, its history starting with la-gram's history
+    of its files (la-gram's `.agents/tasks/github-move/`). `.github/workflows/kernel.yml` checks types, the unit
+    tests and the package on each pull request and push to `main`; `.gitlab-ci.yml`, never run, is gone.
+  - **Test timeout:** `vitest.config.ts` has la-gram's `testTimeout` of 20 s again, lost when its configuration was
+    adapted. The first run on GitHub failed one property test at Vitest's 5 s
+    (`model-merge.property.test.ts`: 6.9 s on the runner, 0.7 s in a local full run). No test changed.
 - **2026-11-25. ArchiMate 3.2's pictures are ones meta.linked.archi serves.**
   - **Asset:** `archimate3.2-onto.ttl`, refreshed from meta. Its classes named pictures under
     `https://meta.linked.archi/archimate/v3/img/`, which meta.linked.archi answers 404 for. An element type's is now
