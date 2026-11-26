@@ -26,7 +26,7 @@ The migration task retains explicit closure checks; E1/A remains open for the fu
 ## K01 qualification and remaining work
 
 The source copy, typecheck, tests and packed 0.1.4 consumer checks have passed locally. The tarball from
-kernel `8893388` matches the pin in both consumers, and an empty Vitest project loaded its RDF store and
+kernel `b96d741` matches the pin in both consumers, and an empty Vitest project loaded its RDF store and
 bundled assets. The [task log](tasks.md) records the evidence.
 
 The original Git history and clean CI evidence are the remaining K01 items. Use the recorded pre-migration

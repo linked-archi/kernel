@@ -38,6 +38,8 @@ that I can open and edit it in either tool and lose nothing.
 3. The bundled copies are byte-identical to their published source and are refreshed with `npm run sync-assets`.
 
 4. SHACL property descriptors retain declared groups, order, names and constraints without choosing a screen layout.
+   Named and anonymous node shape references can be read directly, including conjunctive targets and diagnostics
+   for recursive or unsupported forms.
 
 ### Requirement 4: Model operations
 
@@ -50,7 +52,10 @@ that I can open and edit it in either tool and lose nothing.
 3. Every removal that can be undone has a twin that returns exactly the quads it removes.
 4. Generic property and type edits preserve other predicates, additional types and contexts. Application identity,
    command history and recovery policy remain in the consumer.
-4. Model data has no blank nodes.
+5. Model data has no blank nodes.
+6. Creating a nested part records its parent, property, ownership and membership with a minted IRI. Editing
+   requires exclusive ownership. Removing a shared, unknown or non-leaf part preserves its RDF and removes
+   the chosen link. Safe leaf removal uses an exact quad set for undo.
 
 ### Requirement 5: Change, diff and merge
 

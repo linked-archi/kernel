@@ -15,10 +15,15 @@ export interface NestedResourceLink {
 }
 
 export type NestedResourceAccess = 'missing' | 'owned' | 'reference';
+export interface NestedResourceRemoval {
+  readonly paths?: readonly string[];
+  readonly classIris?: readonly string[];
+}
 
 const MODEL_GRAPH = DataFactory.defaultGraph() as unknown as NamedNode;
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/;
-const PROPERTY_STAMPS = new Set([IRI.dctermsCreated, IRI.dctermsModified, NAMESPACES.prov + 'wasGeneratedBy']);
+const PROPERTY_STAMPS = new Set([IRI.dctermsCreated, IRI.dctermsModified, NAMESPACES.prov + 'wasGeneratedBy',
+  NAMESPACES.prov + 'generatedAtTime']);
 const STRUCTURAL_PATHS = new Set<string>([
   IRI.rdfType, IRI.inModel, IRI.inView, IRI.dctermsIsPartOf, IRI.source, IRI.target, IRI.reifies,
   IRI.modelConformsToMetamodel, IRI.viewConformsToViewpoint, IRI.legacyConformsToMetamodel,
@@ -27,7 +32,7 @@ const STRUCTURAL_PATHS = new Set<string>([
   IRI.visSource, IRI.visTarget,
 ]);
 
-function isResourceProperty(store: RdfStore, path: string): boolean {
+export function isNestedResourceProperty(store: RdfStore, path: string): boolean {
   return !!path && !STRUCTURAL_PATHS.has(path) && !PROPERTY_STAMPS.has(path) && !path.startsWith(NAMESPACES.prov)
     && !isQualifiedPredicate(store, path) && !store.getQuads(null, T.unqualifiedForm, nn(path)).length;
 }
@@ -68,7 +73,7 @@ function hasOtherReferences(store: RdfStore, link: NestedResourceLink, assertion
     // The ownership backlink of a verified descendant does not make its parent a shared reference.
     if (q.graph.termType === 'DefaultGraph' && q.predicate.equals(T.dctermsIsPartOf) && q.subject.termType === 'NamedNode'
       && ownsPart(store, link.childIri, q.subject.value)
-      && store.getQuads(child, null, q.subject, MODEL_GRAPH).some(edge => isResourceProperty(store, edge.predicate.value))) continue;
+      && store.getQuads(child, null, q.subject, MODEL_GRAPH).some(edge => isNestedResourceProperty(store, edge.predicate.value))) continue;
     return true;
   }
   // A reifier or another quoted RDF triple can refer to a part without a direct incoming assertion.
@@ -78,7 +83,7 @@ function hasOtherReferences(store: RdfStore, link: NestedResourceLink, assertion
 
 /** Ownership is persisted as data. A name or a sh:node constraint on its own establishes no ownership. */
 export function nestedResourceAccess(store: RdfStore, link: NestedResourceLink): NestedResourceAccess {
-  if (!isResourceProperty(store, link.path) || !parentModel(store, link.parentIri)) return 'missing';
+  if (!isNestedResourceProperty(store, link.path) || !parentModel(store, link.parentIri)) return 'missing';
   const [assertion] = store.getQuads(nn(link.parentIri), nn(link.path), nn(link.childIri), MODEL_GRAPH);
   if (!assertion) return 'missing';
   return ownsPart(store, link.parentIri, link.childIri) && !hasOtherReferences(store, link, assertion)
@@ -88,7 +93,7 @@ export function nestedResourceAccess(store: RdfStore, link: NestedResourceLink):
 /** Mint a part under its parent. The calling form supplies classes explicitly required by its shapes. */
 export function createNestedResource(store: RdfStore, parentIri: string, path: string, classIris: readonly string[] = []): string {
   const model = parentModel(store, parentIri);
-  if (!model || !isResourceProperty(store, path)) throw new Error('The nested property must belong to a resource in the model.');
+  if (!model || !isNestedResourceProperty(store, path)) throw new Error('The nested property must belong to a resource in the model.');
   const childIri = partIri(parentIri, 'part', uuid());
   const child = nn(childIri);
   const parent = nn(parentIri);
@@ -102,7 +107,7 @@ export function createNestedResource(store: RdfStore, parentIri: string, path: s
 /** Shared values are edited through their own resource, with no writes through nested references. */
 export function replaceNestedResourceValues(store: RdfStore, link: NestedResourceLink, path: string, values: readonly Term[]): void {
   if (nestedResourceAccess(store, link) !== 'owned') throw new Error('This nested resource is a read-only reference.');
-  if (!isResourceProperty(store, path)) throw new Error('This nested property cannot be edited.');
+  if (!isNestedResourceProperty(store, path)) throw new Error('This nested property cannot be edited.');
   const subject = nn(link.childIri);
   const current = store.getQuads(subject, nn(path), null, MODEL_GRAPH).map(q => q.object);
   if ([...current, ...values].some(term => term.termType !== 'Literal' && term.termType !== 'NamedNode')) {
@@ -116,23 +121,25 @@ export function replaceNestedResourceValues(store: RdfStore, link: NestedResourc
 }
 
 /** The precise removal set. Keep a subtree or any unrecognised data intact when unlinking its owner. */
-export function collectNestedResourceQuads(store: RdfStore, link: NestedResourceLink, removablePaths: readonly string[] = []): Quad[] {
+export function collectNestedResourceQuads(store: RdfStore, link: NestedResourceLink, removable: NestedResourceRemoval = {}): Quad[] {
   const access = nestedResourceAccess(store, link);
   if (access === 'missing') return [];
   const child = nn(link.childIri);
   const assertion = store.getQuads(nn(link.parentIri), nn(link.path), child, MODEL_GRAPH);
   if (access !== 'owned' || store.getQuads(null, T.dctermsIsPartOf, child, MODEL_GRAPH).length) return assertion;
-  const paths = new Set(removablePaths.filter(path => isResourceProperty(store, path)));
+  const paths = new Set(removable.paths?.filter(path => isNestedResourceProperty(store, path)));
+  const classIris = new Set(removable.classIris);
   const statements = store.getQuads(child, null, null, MODEL_GRAPH);
-  const removable = statements.every(q => {
+  const prunable = statements.every(q => {
     if (q.object.termType !== 'Literal' && q.object.termType !== 'NamedNode') return false;
     const predicate = q.predicate.value;
-    return predicate === IRI.dctermsIsPartOf || predicate === IRI.inModel || predicate === IRI.rdfType
+    if (predicate === IRI.rdfType) return q.object.termType === 'NamedNode' && classIris.has(q.object.value);
+    return predicate === IRI.dctermsIsPartOf || predicate === IRI.inModel
       || PROPERTY_STAMPS.has(predicate) || paths.has(predicate);
   });
-  return removable ? [...assertion, ...statements] : assertion;
+  return prunable ? [...assertion, ...statements] : assertion;
 }
 
-export function removeNestedResource(store: RdfStore, link: NestedResourceLink, removablePaths?: readonly string[]): void {
-  store.removeQuads(collectNestedResourceQuads(store, link, removablePaths));
+export function removeNestedResource(store: RdfStore, link: NestedResourceLink, removable?: NestedResourceRemoval): void {
+  store.removeQuads(collectNestedResourceQuads(store, link, removable));
 }

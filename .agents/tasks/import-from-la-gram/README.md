@@ -6,8 +6,11 @@
 
 - **The files are copied:** 413 of them, byte for byte, from la-gram's working tree on branch `basic-interaction`. Seven were synced again from `pre-release` on 2026-11-23 (`copy-manifest.json`, `syncs`).
   `copy-manifest.json` lists what was adapted (one test) and the 14 tests that stayed in la-gram (KD-4).
-- **History import is open as of 2026-11-25.** The current kernel branch starts with its own initial commit.
-  Verify the recorded origins in a scratch clone before any change to the branch history.
+- **History imported, 2026-11-25**, as the kernel moved to GitHub (la-gram's `.agents/tasks/github-move/`, GH-DD-2):
+  la-gram's history of the kernel's files, up to la-gram's `3ef817d` ("drag views into views", six minutes before the
+  kernel's first commit, and the one whose files differ least from it), with the kernel's own commits grafted on top,
+  their files unchanged. The steps below were the plan before the kernel had commits of its own; laying its files
+  over as one commit would have lost them.
 
 ## Import the history
 
@@ -79,7 +82,7 @@ history. This repository's own files then go on top as one commit.
 ## Checklist
 
 - [x] Copy the files and write the manifest (2026-11-20)
-- [ ] la-gram's work in progress committed
-- [ ] History filtered, stayed tests removed, kernel files committed
-- [ ] `.git` moved here; `git status` clean
-- [ ] Remote created (GitLab), pushed
+- [x] la-gram's work in progress committed (2026-11-25)
+- [x] History filtered and grafted, the kernel's own commits kept (2026-11-25; la-gram's `build-github-history.sh`)
+- [x] The checkout follows the result; `git status` clean (2026-11-25)
+- [x] Remote created (GitHub, `linked-archi/kernel`), pushed (2026-11-25)

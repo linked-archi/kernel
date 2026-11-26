@@ -4,6 +4,20 @@
 
 ---
 
+## Nested SHACL forms and owned resources — 2026-11-26
+
+- [x] Read conjunctive named and anonymous `sh:node` targets directly. Keep the singular descriptor field
+  for existing consumers. Report unsupported paths and recursive or malformed forms (KReq 3.4).
+- [x] Mint named parts and verify explicit ownership, model membership and competing references before edits.
+  Exact removals preserve shared parts, branches and unrecognised predicates, types and RDF terms (KReq 4.6).
+- [x] Typecheck and run all 855 kernel tests on the draft package source. Compare archive contents with
+  the reviewed 0.1.4 package. All 272 assets and all fixtures match. The draft `0.1.5-w04.0` SHA-256 is
+  `def9927ba0103fb5a1963721b189fd041364fd4fb72a1390123b48d06cf16e16`.
+- [x] Install the same archive in the workspace and an isolated la-gram build. The browser harness verifies
+  exact change-set replay, undo, bidirectional RDF and unlinking a shared resource. All 93 la-gram web tests
+  passed. The browser-only build skipped two Electron smoke tests.
+- [ ] Freeze and publish the shared API through K02b and qualify a Studio-generated extension.
+
 ## SHACL presentation in the draft 0.1.4 package — 2026-11-25
 
 - [x] Remove the field-presence calculator and its weight vocabulary. Keep tool-neutral SHACL property
@@ -15,7 +29,7 @@
   The final repack trims one trailing blank line from the browser-tested payload.
 - [x] Recheck against the reviewed meta revision `d46b2c1`. All 272 mapped files match, and the two installed
   consumer archives are byte-identical.
-- [x] Repack from kernel `8893388` and compare to the pinned file in both apps. The SHA-256 above matches.
+- [x] Repack from kernel `b96d741` and compare to the pinned file in both apps. The SHA-256 above matches.
   A fresh temporary project installed the archive and Vitest 4.1.12 on Node 26.13.1. The smoke test used the
   package root, loaded the core and ArchiMate 4.0 assets offline, and read the authored SHACL field sections.
   `npm ls n3 oxigraph --all` showed one copy of each. Source typecheck and all 841 tests passed again.
@@ -60,7 +74,7 @@ The owner requested checks before the migration commits, then documentation, the
 K02 API publication, or the PD-17 two-tool gate.
 
 - [x] Re-read platform PD-16/PD-17 and workspace WD-15: any chosen metamodel; fixed screens; Studio authors extensions.
-- [x] `npm run typecheck` passed on the `0cee219` code checkpoint.
+- [x] `npm run typecheck` passed on the `b9c940c` code checkpoint.
 - [x] `npm test` passed: **51 files, 844 tests** (including seven editor/fixture checks).
 - [x] Both consumers install the same `vendor/linked-archi-kernel-0.1.0.tgz`; their lockfiles pin its integrity.
 - [x] Workspace browser handoff opens, edits, saves, imports into la-gram, renames on its canvas, imports back,
@@ -95,12 +109,12 @@ are open.
 - [x] Synced with la-gram's `pre-release` (2026-11-23): `model-diff.ts`, `model-diff-text.ts`, `provenance.ts`, `version-history.ts`, `build-flags.d.ts`, `model-diff.test.ts`, and `src/storage-scope.ts`, which `version-history.ts` now imports. Every copied file now matches la-gram's, except the one adapted test
 - [x] Oxigraph pinned at `0.5.11` in `package.json` and `package-lock.json`, as la-gram's lock has it (2026-11-23)
 - [x] `npm install` (2026-11-20)
-- [x] `npm ls oxigraph n3` shows 0.5.11 and 2.13.12, one copy each. The lockfile is committed in `8893388`.
-- [x] `npm run typecheck` passes on `8893388`.
-- [x] `npm test` passes on `8893388` (52 files, 841 tests).
+- [x] `npm ls oxigraph n3` shows 0.5.11 and 2.13.12, one copy each. The lockfile is committed in `b96d741`.
+- [x] `npm run typecheck` passes on `b96d741`.
+- [x] `npm test` passes on `b96d741` (52 files, 841 tests).
 - [ ] History imported, matching the copy file for file (`.agents/tasks/import-from-la-gram/`)
-- [x] `npm pack` and the empty-project Vitest check pass on `8893388`, with the exact consumer archive.
-- [ ] Record the clean GitLab CI run on the qualified revision.
+- [x] `npm pack` and the empty-project Vitest check pass on `b96d741`, with the exact consumer archive.
+- [x] The checks on GitHub Actions (`.github/workflows/kernel.yml`): typecheck, the unit tests and `pack:check` pass on `main` at `894c295` (2026-11-25).
 
 ## Queued for K02
 
@@ -123,7 +137,7 @@ Findings from K01, recorded 2026-11-20, not started:
 - [ ] **The 14 tests that stayed in la-gram:** rewrite any that test kernel behaviour on the kernel's API.
 - [ ] **The conformance suite**, seeded from `src/__tests__/fixtures/merge` and `diff` (KReq 1.4, PD-08).
 - [ ] **The public API**, from the calls W03, W04 and L01 list; narrow the exports (KD-5).
-- [ ] **Publication** to the GitLab package registry.
+- [ ] **Publication.** To decide: where, now that the repository is on GitHub (npm, as `@linked-archi/la-gram-git` is, or GitHub Packages).
 
 ## Known limitations
 

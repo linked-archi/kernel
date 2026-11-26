@@ -18,6 +18,7 @@ const details = 'https://example.org/metamodel#details';
 const detailType = 'https://example.org/metamodel#Contact';
 const message = 'https://example.org/metamodel#message';
 const secret = 'https://example.org/metamodel#extra';
+const knownLeaf = { paths: [message], classIris: [detailType] };
 
 async function setup(parentIri = owner) {
   const store = new ObservableRdfStore(await OxigraphRdfStore.create());
@@ -71,16 +72,17 @@ describe('nested model resource operations (KReq 3–5)', () => {
       triple(s, T.dctermsCreated, dateTimeLiteral(new Date('2026-11-25T18:00:00Z'))),
       triple(s, T.dctermsModified, dateTimeLiteral(new Date('2026-11-25T19:00:00Z'))),
       triple(s, nn(NAMESPACES.prov + 'wasGeneratedBy'), nn('urn:test:activity')),
+      triple(s, nn(NAMESPACES.prov + 'generatedAtTime'), dateTimeLiteral(new Date('2026-11-25T19:00:00Z'))),
     ]);
 
-    const toRemove = collectNestedResourceQuads(store, link, [message]);
-    expect(toRemove).toHaveLength(8);
-    const removed = store.record(() => removeNestedResource(store, link, [message]));
+    const toRemove = collectNestedResourceQuads(store, link, knownLeaf);
+    expect(toRemove).toHaveLength(9);
+    const removed = store.record(() => removeNestedResource(store, link, knownLeaf));
     expect(removed.removed).toEqual(toRemove);
     expect(statements(store, link.childIri)).toEqual([]);
     store.applyDiff(removed, true);
     expect(nestedResourceAccess(store, link)).toBe('owned');
-    expect(collectNestedResourceQuads(store, link, [message])).toHaveLength(8);
+    expect(collectNestedResourceQuads(store, link, knownLeaf)).toHaveLength(9);
   });
 
   it('recognizes shared resources, even when initially minted with an ownership statement', async () => {
@@ -92,7 +94,7 @@ describe('nested model resource operations (KReq 3–5)', () => {
     const before = statements(store, link.childIri);
     expect(nestedResourceAccess(store, link)).toBe('reference');
     expect(() => replaceNestedResourceValues(store, link, message, [])).toThrow(/read-only reference/);
-    removeNestedResource(store, link, [message]);
+    removeNestedResource(store, link, knownLeaf);
     expect(statements(store, link.childIri)).toEqual(before);
     expect(nestedResourceAccess(store, { ...link, parentIri: other })).toBe('reference');
     expect(nestedResourceAccess(store, link)).toBe('missing');
@@ -105,8 +107,8 @@ describe('nested model resource operations (KReq 3–5)', () => {
     const data = [triple(nn(childIri), nn(message), langLiteral('Imported'))];
     store.addQuads([...data, triple(nn(owner), nn(details), nn(childIri))]);
     expect(nestedResourceAccess(store, link)).toBe('reference');
-    expect(collectNestedResourceQuads(store, link, [message])).toHaveLength(1);
-    removeNestedResource(store, link, [message]);
+    expect(collectNestedResourceQuads(store, link, knownLeaf)).toHaveLength(1);
+    removeNestedResource(store, link, knownLeaf);
     expect(statements(store, childIri)).toEqual(data);
   });
 
@@ -121,7 +123,7 @@ describe('nested model resource operations (KReq 3–5)', () => {
     expect(() => replaceNestedResourceValues(store, link, details, [])).toThrow(/nested resource operation/);
     const parentBefore = statements(store, link.childIri);
     const descendantBefore = statements(store, descendant.childIri);
-    removeNestedResource(store, link, [details, message]);
+    removeNestedResource(store, link, { ...knownLeaf, paths: [details, message] });
     expect(statements(store, link.childIri)).toEqual(parentBefore);
     expect(statements(store, descendant.childIri)).toEqual(descendantBefore);
   });
@@ -137,8 +139,8 @@ describe('nested model resource operations (KReq 3–5)', () => {
         : triple(item, nn(details), item);
     store.addQuads([example]);
     expect(nestedResourceAccess(store, link)).toBe('reference');
-    expect(collectNestedResourceQuads(store, link, [details])).toHaveLength(1);
-    removeNestedResource(store, link, [details]);
+    expect(collectNestedResourceQuads(store, link, { ...knownLeaf, paths: [details] })).toHaveLength(1);
+    removeNestedResource(store, link, { ...knownLeaf, paths: [details] });
     expect(store.getQuads().some(q => q.equals(example))).toBe(true);
     expect(statements(store, link.childIri)).toContainEqual(triple(item, T.dctermsIsPartOf, nn(owner)));
   });
@@ -151,7 +153,17 @@ describe('nested model resource operations (KReq 3–5)', () => {
     expect(() => replaceNestedResourceValues(store, link, IRI.dctermsIsPartOf, [nn(other)])).toThrow(/cannot be edited/);
     expect(() => replaceNestedResourceValues(store, link, message, [DataFactory.blankNode() as never])).toThrow(/unsupported RDF term/);
     const before = statements(store, link.childIri);
-    removeNestedResource(store, link, [message]);
+    removeNestedResource(store, link, knownLeaf);
     expect(statements(store, link.childIri)).toEqual(before);
+  });
+
+  it('keeps an owned part with an RDF type outside the applicable shape', async () => {
+    const store = await setup();
+    const link = create(store);
+    const extraType = triple(nn(link.childIri), T.rdfType, nn('urn:other:AdditionalType'));
+    store.addQuads([extraType]);
+    expect(collectNestedResourceQuads(store, link, knownLeaf)).toHaveLength(1);
+    removeNestedResource(store, link, knownLeaf);
+    expect(statements(store, link.childIri)).toContainEqual(extraType);
   });
 });

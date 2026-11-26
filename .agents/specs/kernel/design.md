@@ -111,3 +111,15 @@ undo history and save policy. `metamodel-manager/property-shapes.ts` reads SHACL
 lives in `fixtures/interoperability/`; application grid projections do not ship in this package. Optional bundled
 asset options are passed through the existing source factory. Source declarations reference their own build-flag
 ambient types so consumers need no global shim.
+
+## KD-7 Shape descriptors and ownership are separate contracts (2026-11-26, KReq 3.4, 4.6)
+
+`propertyShapesForNodeShapes` reads the SHACL terms a property references and returns fields, required classes
+and diagnostics. The existing `nodeShape` string remains available to consumers. The `nodeShapes` term list
+keeps named and anonymous references distinct. The validator remains responsible for evaluating the shape.
+
+`model-manager/nested-resources.ts` mints a part IRI under the parent, records `dcterms:isPartOf` and inherits
+`arch:inModel`. The IRI, explicit ownership and same-model membership are checked together. Extra incoming or
+quoted RDF references make the part read-only. Its own verified children's ownership backlinks still allow edits
+to the part. Unlink preserves shared data, branches and statements outside the field and class descriptors.
+Exclusive leaves can be removed through the same quad collection used for undo.
