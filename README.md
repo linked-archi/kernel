@@ -17,17 +17,17 @@ decision PD-14).
 
 ## Status
 
-**Both applications consume the same qualified source package.** The 2026-11-25 check passed typecheck and
-840 tests across 52 files. la-gram's migration builds web, desktop and CLI against the installed package and passes
-its browser suite. The workspace's browser test verifies complete RDF handoff and canvas edits in la-gram with ArchiMate 4.0 and 3.2.
+The kernel's clean CI and packed installs are recorded in the task log. The workspace browser suite verifies
+complete RDF handoffs with la-gram on ArchiMate 4.0, declared ArchiMate 3.2 and a Studio-generated extension.
 
 - **Source:** model modules and assets are maintained here; la-gram holds no independent implementation.
 - **App-dependent tests:** 14 integration tests and their Basic fixture remain in la-gram's `src/__tests__/kernel/`.
-- **History:** historical import is still tracked in `.agents/tasks/import-from-la-gram/`.
-- **Public API:** provisional until K02. Application sessions live in their consumers. Neutral `metamodel-manager/property-shapes.ts` and
-  `model-manager/resource-edits.ts` provide reusable SHACL descriptors and RDF edits.
-- **Acceptance:** the broader two-tool gate still needs a Studio-generated extension and the remaining workspace acceptance cases. Local RDF
-  handoff does not establish shared versioned persistence or live collaboration.
+- **History:** the [K01 ancestry check](.agents/tasks/import-from-la-gram/README.md) verifies the 98 inherited
+  la-gram commits and the first kernel commit.
+- **Public API:** the package export map lists the supported consumer module paths. Application sessions live in
+  their consumers. Shared SHACL descriptors and RDF edits are available through the kernel.
+- **Acceptance:** the full E1/A matrix also includes workspace inventory and accessibility. Shared versioned
+  persistence and live collaboration have their own acceptance checks.
 
 | To read | Where |
 |---|---|
@@ -43,7 +43,7 @@ with the consumer's code.
 
 ```ts
 import { modelManager, rdfEngine } from '@linked-archi/kernel';
-import { diffModels } from '@linked-archi/kernel/model-manager/model-diff.js'; // any module file, until K02
+import { diffModels } from '@linked-archi/kernel/model-manager/model-diff.js';
 ```
 
 Until K02 publishes a version, a consumer installs the tarball `npm pack` makes here:
@@ -70,6 +70,11 @@ The bundled metamodels are in `assets/`, laid out as `https://meta.linked.archi/
 - **In Node**, they are found beside the package.
 - **In a browser**, the application copies `node_modules/@linked-archi/kernel/assets/` into its build, as
   `assets/`.
+
+The `@linked-archi/kernel/conformance` entry tests a consumer's real open, save and validation path against
+the bundled ArchiMate 4.0 fixture. Pass `runShopConformance` a file reader and an adapter that returns the
+opened model IRI, metamodel IRIs, canonical TriG and validation findings. `conformanceFindings` projects the
+validator's RDF terms to the comparison format. The kernel and both applications use it in their unit suites.
 
 ## Develop
 

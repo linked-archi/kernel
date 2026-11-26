@@ -399,6 +399,15 @@ export class OxigraphViewManager implements ViewManager {
     if (text) this.store.addQuads([triple(node, T.prefLabel, langLiteral(text))]);
   }
 
+  /** A node's drawing order (core-vis 0.10, linked-archi-meta's DD-45): an integer, none for 0. */
+  setNodeZOrder(viewIri: string, nodeIri: string, zOrder: number | undefined): void {
+    const node = nn(nodeIri);
+    if (!this.objects(node, T.visView).includes(viewIri)) return;
+    this.remove(this.read(node, T.zOrder));
+    const value = zOrder === undefined ? 0 : Math.trunc(zOrder);
+    if (value !== 0) this.store.addQuads([triple(node, T.zOrder, DataFactory.literal(String(value), nn(NAMESPACES.xsd + 'integer')))]);
+  }
+
   // ── References to other views (core-vis 0.9, Req 3.23) ─────────────────
 
   referencesTo(viewIri: string): ViewReferenceInfo[] {
@@ -773,9 +782,11 @@ export class OxigraphViewManager implements ViewManager {
     // How it looks for each presentation — a figure's too; its look for every one is in its figure.
     const contextAppearances = this.contextAppearancesOf(node);
     const labelExpressions = figure ? [] : this.labelExpressionsOf(node);
+    const zOrder = numberOf(this.read(node as NamedNode, T.zOrder)[0]?.object);
     return {
       nodeIri: node.value,
       elementIri,
+      ...(zOrder ? { zOrder } : {}),
       ...(labelExpressions.length > 0 ? { labelExpressions } : {}),
       ...(contextAppearances ? { contextAppearances } : {}),
       ...(parentElementIri ? { parentElementIri, parentNodeIri: parentNode!.value } : {}),

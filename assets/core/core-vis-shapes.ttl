@@ -40,14 +40,17 @@ clean. The two load-bearing rules here are ArchNodeShape (a diagram node that cl
 stand for a model element must say which one) and PlacedDiagElementShape (a shape or edge
 must belong to exactly one view); the remainder is cardinality and datatype hygiene.'''@en ;
     dcterms:created               "2026-08-13"^^xsd:date ;
-    dcterms:modified              "2026-11-20"^^xsd:date ;
+    dcterms:modified              "2026-11-26"^^xsd:date ;
     dcterms:publisher             "Linked.Archi"@en,
                                   <https://linked.archi> ;
     bibo:status                   "draft" ;
-    owl:versionIRI                <https://meta.linked.archi/core-vis-shapes/0.5.0#> ;
-    owl:versionInfo               "0.5.0"@en ;
-    owl:priorVersion              <https://meta.linked.archi/core-vis-shapes/0.4.0#> ;
-    skos:historyNote              '''0.5.0 — ViewReferenceNodeShape: a reference to another view, which
+    owl:versionIRI                <https://meta.linked.archi/core-vis-shapes/0.6.0#> ;
+    owl:versionInfo               "0.6.0"@en ;
+    owl:priorVersion              <https://meta.linked.archi/core-vis-shapes/0.5.0#> ;
+    skos:historyNote              '''0.6.0 — NodeOrderShape: a node's arch-vis:zOrder, which core-vis 0.10 adds, is
+a single xsd:integer.
+
+0.5.0 — ViewReferenceNodeShape: a reference to another view, which
 core-vis 0.9 adds, opens exactly one arch:View, named by IRI through arch-vis:referencesView, and carries
 no arch-vis:archElement, as a LabelNode carries none.
 0.4.0 — StyleShape checks arch-vis:useElementPicture, which core-vis 0.8
@@ -275,6 +278,18 @@ edges may be labelled — the domain is DiagElement since core-vis 0.3.'''@en ;
         sh:maxCount 1 ;
         sh:datatype xsd:double ;
         sh:message  "bounds-h must be a single xsd:double."@en ;
+    ] ;
+.
+
+:NodeOrderShape
+    a              sh:NodeShape ;
+    sh:targetClass arch-vis:Node ;
+    rdfs:label     "Node drawing order shape"@en ;
+    sh:property [
+        sh:path     arch-vis:zOrder ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:integer ;
+        sh:message  "A node has at most one drawing order (arch-vis:zOrder), an xsd:integer."@en ;
     ] ;
 .
 

@@ -1,88 +1,51 @@
 # Import from la-gram (K01)
 
-**Goal.** The kernel starts as la-gram's model logic, with its Git history (platform decision PD-14).
+The kernel retains the Git history of the model logic copied from la-gram (PD-14). The history was
+imported during the move to GitHub on 2026-11-25. The [copy manifest](copy-manifest.json) records
+the initial working-tree copy, the adapted writer test, the 14 tests that stayed in la-gram and
+the files synced again on 2026-11-23. The manifest counts the 413 copied source and data files
+together with `LICENSE`.
 
-**Status, 2026-11-20.**
+## Verified ancestry
 
-- **The files are copied:** 413 of them, byte for byte, from la-gram's working tree on branch `basic-interaction`. Seven were synced again from `pre-release` on 2026-11-23 (`copy-manifest.json`, `syncs`).
-  `copy-manifest.json` lists what was adapted (one test) and the 14 tests that stayed in la-gram (KD-4).
-- **History imported, 2026-11-25**, as the kernel moved to GitHub (la-gram's `.agents/tasks/github-move/`, GH-DD-2):
-  la-gram's history of the kernel's files, up to la-gram's `3ef817d` ("drag views into views", six minutes before the
-  kernel's first commit, and the one whose files differ least from it), with the kernel's own commits grafted on top,
-  their files unchanged. The steps below were the plan before the kernel had commits of its own; laying its files
-  over as one commit would have lost them.
+On 2026-11-26, all 98 inherited kernel commits were checked against the la-gram history ending at
+`3ef817d`. Each had a unique la-gram source commit with matching author and committer timestamps,
+subject, and filtered Git tree. The 429 entries at the inherited tip `111ce17` match by path,
+mode and object ID. The first kernel commit `3d7014e` has that tip as its parent. The kernel clone
+has complete history and no replacement refs.
 
-## Import the history
+The 22 path differences introduced by the first kernel commit within the filtered paths match
+the recorded changes. The adapted writer test has a different blob. Fourteen application tests
+stayed in la-gram. Of the seven paths synced later, six have different blobs and
+`src/storage-scope.ts` is absent. All seven blobs in kernel `b9c940c` match la-gram `31994cf`.
+The [GitHub move task](../../../../../modellers/la-gram/.agents/tasks/github-move/design.md)
+records the original graft.
 
-The copy keeps la-gram's paths (KD-1). So a clone of la-gram, filtered to these paths, has the same files with their
-history. This repository's own files then go on top as one commit.
+## Verify the inherited tip
 
-1. **In la-gram**, commit what is in progress, so the history holds what was copied. The kernel was synced on
-   2026-11-23 from `pre-release`, which then held la-gram's latest work: take history from that branch, or from
-   whatever it is merged into. Choose the branch to take
-   history from: `pre-release`, or the branch it is merged into.
+Run from the directory containing both checkouts, in Bash or Zsh. An empty diff confirms the
+filtered source and inherited tree match. The parent and commit count should be `111ce17` (full
+object ID by default) and 98 respectively.
 
-2. **Filter a fresh clone** to the kernel's paths. Install `git-filter-repo` first, with `brew install git-filter-repo`.
-
-   ```sh
-   git clone --no-local linked.archi/tools/modellers/la-gram /tmp/la-kernel-history
-   cd /tmp/la-kernel-history
-   git checkout pre-release
-   git filter-repo --force \
-     --path src/rdf-engine/ --path src/metamodel-manager/ --path src/model-manager/ \
-     --path src/import-export/model-io.ts --path src/import-export/__tests__/model-io.test.ts \
-     --path src/types/build-flags.d.ts --path src/storage-scope.ts --path src/__tests__/sync-assets.test.ts \
-     --path src/__tests__/fixtures/merge/ --path src/__tests__/fixtures/diff/ \
-     --path scripts/sync-assets.mjs --path scripts/bench-model.mjs \
-     --path assets/ --path LICENSE
-   ```
-
-3. **Take out the tests that stay in la-gram:**
-
-   ```sh
-   git rm -q \
-     src/metamodel-manager/__tests__/basic-metamodel.test.ts \
-  src/metamodel-manager/__tests__/catalogue.test.ts \
-  src/metamodel-manager/__tests__/palette-snapshot.test.ts \
-  src/model-manager/__tests__/folders.test.ts \
-  src/model-manager/__tests__/iri-conformance.test.ts \
-  src/model-manager/__tests__/model-contents-index.test.ts \
-  src/model-manager/__tests__/property-catalog.test.ts \
-  src/model-manager/__tests__/provenance.test.ts \
-  src/model-manager/__tests__/questions.test.ts \
-  src/model-manager/__tests__/rdf-scope.test.ts \
-  src/model-manager/__tests__/relationship-lookup-memo.test.ts \
-  src/model-manager/__tests__/relationship-ranking.test.ts \
-  src/model-manager/__tests__/relationship-validity.test.ts \
-  src/rdf-engine/__tests__/validation-engine.test.ts
-   git commit -m "Leave la-gram's application-level tests in la-gram (KD-4)"
-   ```
-
-4. **Lay this repository's files over it**, and commit the kernel's own files and the one adapted test:
-
-   ```sh
-   rsync -a --delete --exclude .git --exclude node_modules linked.archi/tools/platform/linked-archi-kernel/ /tmp/la-kernel-history/
-   git add -A
-   git status --short   # expect only the kernel's own files and src/rdf-engine/__tests__/turtle-writer.test.ts
-   git commit -m "Kernel repository (K01): package, specifications, CI; turtle-writer test checks the kernel's n3 pin"
-   ```
-
-   `--delete` drops anything the filter kept that the kernel did not copy. On 2026-11-20 there was nothing of the
-   kind; a deletion listed here is worth a look. If `git status` lists other copied files as changed, la-gram changed
-   after 2026-11-20. Review them, and keep
-   la-gram's committed version unless the change belongs to the kernel.
-
-5. **Move the history into this repository** and check that nothing differs:
-
-   ```sh
-   mv /tmp/la-kernel-history/.git linked.archi/tools/platform/linked-archi-kernel/.git
-   cd linked.archi/tools/platform/linked-archi-kernel && git status   # expect: nothing to commit, working tree clean
-   ```
+```sh
+modeller_repo=tools/modellers/la-gram
+kernel_repo=tools/platform/linked-archi-kernel
+kernel_paths=(
+  src/rdf-engine/ src/metamodel-manager/ src/model-manager/
+  src/import-export/model-io.ts src/import-export/__tests__/model-io.test.ts
+  src/types/build-flags.d.ts src/storage-scope.ts src/__tests__/sync-assets.test.ts
+  src/__tests__/fixtures/merge/ src/__tests__/fixtures/diff/
+  scripts/sync-assets.mjs scripts/bench-model.mjs assets/ LICENSE
+)
+diff <(git -C "$modeller_repo" ls-tree -r 3ef817d -- "${kernel_paths[@]}") \
+     <(git -C "$kernel_repo" ls-tree -r 111ce17)
+git -C "$kernel_repo" rev-parse 3d7014e^
+git -C "$kernel_repo" rev-list --count 111ce17
+git -C "$kernel_repo" replace --list
+```
 
 ## Checklist
 
-- [x] Copy the files and write the manifest (2026-11-20)
-- [x] la-gram's work in progress committed (2026-11-25)
-- [x] History filtered and grafted, the kernel's own commits kept (2026-11-25; la-gram's `build-github-history.sh`)
-- [x] The checkout follows the result; `git status` clean (2026-11-25)
-- [x] Remote created (GitHub, `linked-archi/kernel`), pushed (2026-11-25)
+- [x] Copy the files and record the manifest (2026-11-20).
+- [x] Filter and graft the history, retain the kernel's commits and publish the resulting branch (2026-11-25).
+- [x] Verify every inherited snapshot, the first kernel commit and the follow-up sync (2026-11-26).

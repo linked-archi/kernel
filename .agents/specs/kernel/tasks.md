@@ -4,6 +4,54 @@
 
 ---
 
+## Drawing order — 2026-11-26
+
+For la-gram's release after 0.4.0 (la-gram's `.agents/tasks/drawing-order/`).
+
+- [x] Sync core-vis 0.10 and core-vis-shapes 0.6.0 from meta: `arch-vis:zOrder`, an integer on a node. The asset check
+  found only those two files differ; the catalogue is unchanged (KReq 3.3).
+- [x] `NodeInfo.zOrder`, read with the node; `setNodeZOrder`, by node IRI, an `xsd:integer`, none for 0; copied by
+  `copyPlacements` (*Duplicate view*, paste); one value in a merge, with the bounds in the built-in limits
+  (KReq 4.7) — *view-manager.test, single-valued.test*
+- [x] `drawing-order.ts`: `compareDrawingOrder`, `sortByDrawingOrder`, `reorder` — front, back, one step forward or
+  backward — exported from `modelManager` (KReq 4.7) — *drawing-order.test*, with property tests that a step changes
+  places only with the node it passes and that front and back keep each group's order
+- [x] Typecheck and the unit tests: 52 files, 863 tests
+- [ ] Package it with the next kernel version, and install it in la-gram and the workspace
+
+## K02b shared package candidate — 2026-11-26
+
+- [x] Replace the provisional wildcard with 78 explicit package entries plus the bundled asset pattern.
+  The map covers the current application and Studio imports and the supported barrels. A clean install
+  resolved the entries and all 272 asset files. The 14 retained la-gram tests still use application code.
+- [x] Export `@linked-archi/kernel/conformance` and run the bundled shop fixture through normal model open,
+  save and validation in the kernel and both applications. The runner verifies model and metamodel IRIs,
+  canonical TriG and three pinned SHACL results. Each repository's existing unit-test job includes the test.
+- [x] Build `0.1.5-k02b.0` from kernel `7f17a3a` plus `package.json`, `README.md`, `src/conformance.ts`
+  and `src/__tests__/conformance.test.ts` from this task. In the isolated source tree, set the version using
+  `npm version 0.1.5-k02b.0 --no-git-tag-version --ignore-scripts` and pack with `npm pack --ignore-scripts`
+  (Node 26.13.1 and npm 11.20.0). The archive has 363 files and SHA-256
+  `7781026305766c8b8f0b3cd2e20bba6171b625fb3bdc472e255cc57a5b387b41`.
+  Repacking the same source with those tool versions produced identical bytes.
+  The bundled ArchiMate 3.2 ontology matches meta `9a8dd0b` (SHA-256
+  `5ed7f2856c30262cb82e7d50e87f4d6797fd7ec932f509dec291881c437cc051`).
+  The in-progress drawing-order work is qualified separately.
+- [x] Install that archive in both consumers. Each resolves one copy of n3 and Oxigraph. The isolated
+  candidate passed typecheck and 856 kernel tests, including timing tests. la-gram's typecheck, web,
+  Electron and CLI builds, and la-gram-git package and model checks passed. Clean installs with both
+  consumer lockfiles passed. The kernel CI steps passed locally on Node 22.23.5 and npm 10.9.9
+  with 853 unit tests and a 363-file pack dry-run.
+- [x] The matched browser builds passed all 23 workspace interoperability checks, including declared
+  ArchiMate 3.2 and the Studio extension. The 3.2 check compares both built ontology files to the installed
+  kernel asset. la-gram `c0d399f` passed 2,069 tests and all 97 browser checks, including two Electron checks.
+  The workspace passed 76 tests and 15 strict-CSP host checks.
+- [ ] Review the candidate and choose the publication registry. Publish the approved version and run both
+  consumers on the published artifact. Kotlin validator parity and wider Studio engine checks follow.
+
+The local workspace already supplies its asset base, validation worker, software identity and storage scope.
+la-gram's compatibility defaults still provide the asset cache version, provenance identity and the same
+channel-scoped IndexedDB history. Move those values to its call sites before removing the fallback names.
+
 ## Nested SHACL forms and owned resources — 2026-11-26
 
 - [x] Read conjunctive named and anonymous `sh:node` targets directly. Keep the singular descriptor field
@@ -16,7 +64,9 @@
 - [x] Install the same archive in the workspace and an isolated la-gram build. The browser harness verifies
   exact change-set replay, undo, bidirectional RDF and unlinking a shared resource. All 93 la-gram web tests
   passed. The browser-only build skipped two Electron smoke tests.
-- [ ] Freeze and publish the shared API through K02b and qualify a Studio-generated extension.
+- [x] The workspace interoperability suite generated a pinned ArchiMate 4.0 extension through Studio and
+  both browsers passed the edited RDF handoff on the draft archive (2026-11-26).
+- [ ] Freeze and publish the shared API through K02b. Qualify the final release candidate in both apps.
 
 ## SHACL presentation in the draft 0.1.4 package — 2026-11-25
 
@@ -90,8 +140,8 @@ K02 API publication, or the PD-17 two-tool gate.
 
 ## K01 Repository, copy, build, tests
 
-**2026-11-25:** the local 0.1.4 checks are recorded above. The original source-history import and clean CI evidence
-are open.
+**2026-11-26.** K01 source history and clean CI are verified. The source package at `7f17a3a` still declares
+`0.1.4`. Its package and the staged `0.1.5-w04.0` consumer preview were checked separately.
 
 - **First run.** `npm test` passed on 2026-11-21: 49 test files, 47 unit and 2 timing, none failed. It ran before the
   sync below, so it no longer counts.
@@ -112,32 +162,39 @@ are open.
 - [x] `npm ls oxigraph n3` shows 0.5.11 and 2.13.12, one copy each. The lockfile is committed in `b96d741`.
 - [x] `npm run typecheck` passes on `b96d741`.
 - [x] `npm test` passes on `b96d741` (52 files, 841 tests).
-- [ ] History imported, matching the copy file for file (`.agents/tasks/import-from-la-gram/`)
+- [x] Verified all 98 inherited commits against the filtered la-gram history, with all 429 entries at its tip
+  matching by path, mode and blob. The first kernel commit and the follow-up sync match the expected
+  exceptions recorded in the [history audit](../../tasks/import-from-la-gram/README.md).
 - [x] `npm pack` and the empty-project Vitest check pass on `b96d741`, with the exact consumer archive.
 - [x] The checks on GitHub Actions (`.github/workflows/kernel.yml`): typecheck, the unit tests and `pack:check` pass on `main` at `894c295` (2026-11-25).
+- [x] GitHub Actions on `7f17a3a27bc6a573116c91e23da7e0d904ec1dde` passed locked install, typecheck,
+  852 unit tests across 51 files and `pack:check` (362 files) on Node 22.23.5 and npm 10.9.9.
+  A clean macOS ARM64 rehearsal with the same versions passed the same four steps and produced the
+  same package SHA-1 `179b1500c7fdf89916c1beee361d8901407c9e72`.
+  [GitHub Actions check](https://github.com/linked-archi/kernel/actions/runs/45754850667/job/139690964871)
+- [x] Repack `7f17a3a` from a fresh source tree and install it in an empty Vitest project. Repeat with the
+  workspace's W04 preview in a separate project. Both consumers loaded core, the ArchiMate 4.0 metamodel
+  and its authored field sections offline with one `n3@2.13.12` and `oxigraph@0.5.11` each. The archive
+  matching CI has SHA-256 `6a8f8a892a5226918ee1701b729a70c9b53d230821f406d3b143ab7fb1b50068`.
+  npm 10.9.9 installed the kernel alone and hit `edgesOut` while resolving the Vitest harness. The smoke
+  test against those same package bytes passed with Node 22.23.5, npm 11.20.0 and Vitest 4.1.12.
+- [x] Audit the asset difference between `7f17a3a` and the W04 preview. All 362 package paths match.
+  Three files have changed bytes: `README.md`, `package.json`, and `assets/archimate3/archimate3.2-onto.ttl`.
+  The RDF diff consists of a changed `dct:modified` date plus 71 removed and 60 added `arch:prefVisNotation`
+  statements. The K02b candidate above uses the committed asset and passes the ArchiMate 3.2 browser case.
 
 ## Queued for K02
 
-Findings from K01, recorded 2026-11-20, not started:
-
-- [ ] **The browser asset base is a setting.** `assetUrl()` resolves `assets/…` against `document.baseURI`. In a
-  workspace embedded in a host page, that base is the host's page, not where the workspace serves its assets
-  (workspace WD-7). Needed by W02.
-- [ ] **How the validation worker is created.** It is created as `new Worker(new URL('./validation.worker.ts',
-  import.meta.url))`. In development, Vite needs `{ type: 'module' }` for a worker that imports modules. Check
-  with W02's first run; let the caller create the worker if bundlers disagree.
-- [ ] **Provenance names la-gram as the software agent.** `model-manager/provenance.ts` writes `LA_GRAM_HOME`,
-  `modellerIri()` and `__LA_GRAM_BUILD__`. Edits made in the workspace would be recorded as la-gram's. The agent
-  must come from the caller (KReq 8.3).
-- [ ] **Kernel-neutral build flags**, in place of `__LA_GRAM_ASSETS_VERSION__` and `__LA_GRAM_BUILD__`.
-- [ ] **Checkpoint storage is named for la-gram.** Recorded 2026-11-23. `version-history.ts` keeps checkpoints in an
-  IndexedDB database named `la-gram-history`, through `storage-scope.ts` and la-gram's release channel. In the
-  workspace, that would share a store with la-gram on the same origin. The name, or the store, must come from the
-  caller. `storage-scope.ts` then goes back to being la-gram's alone, and L01 does not delete la-gram's copy.
-- [ ] **The 14 tests that stayed in la-gram:** rewrite any that test kernel behaviour on the kernel's API.
-- [ ] **The conformance suite**, seeded from `src/__tests__/fixtures/merge` and `diff` (KReq 1.4, PD-08).
-- [ ] **The public API**, from the calls W03, W04 and L01 list; narrow the exports (KD-5).
-- [ ] **Publication.** To decide: where, now that the repository is on GitHub (npm, as `@linked-archi/la-gram-git` is, or GitHub Packages).
+- [x] Support a caller-supplied browser asset base, validation worker, provenance agent and IndexedDB name.
+  Qualify these seams with the local workspace and the embedded strict-CSP host (K02a).
+- [ ] Move la-gram's legacy asset version, software agent and storage-scope values to explicit caller settings
+  before removing the build flags. Existing apps use the fallback names for provenance and draft history.
+- [x] Audit the 14 retained la-gram files. Each depends on the application, canvas or CLI and continues
+  to check the packed kernel. The underlying merge and diff fixtures run in the kernel.
+- [x] Supply the shared canonical model test and explicit API export map to both apps in the K02b candidate
+  (KReq 1.4, KD-5). The candidate's test covers current workspace and modeller I/O.
+- [ ] Review the stable version and registry. Qualify the approved release artifact in both apps.
+- [ ] Extend shared conformance to the Kotlin validator and qualify further Studio engine calls after K02b.
 
 ## Known limitations
 
@@ -148,6 +205,16 @@ Findings from K01, recorded 2026-11-20, not started:
 
 ## Change log
 
+- **2026-11-26. A node's drawing order (core-vis 0.10; linked-archi-meta's DD-45).**
+  - **Assets:** `core-vis-onto.ttl` and `core-vis-shapes.ttl`, refreshed from meta: `arch-vis:zOrder`, an integer on a
+    node, its drawing order among the nodes in the same place; absent, 0; the same, by IRI.
+  - **`view-manager.ts`:** `NodeInfo.zOrder`; `setNodeZOrder`. **`placement-copy.ts`:** a copy keeps it.
+    **`single-valued.ts`:** one value in a merge, as a node's bounds.
+  - **`drawing-order.ts`**, new: the order, and the zOrders that bring nodes to the front or the back, or one step
+    forward or backward. A diagram's drawing order was nowhere in its data, so overlapping nodes could swap places
+    after a save and a load. *drawing-order.test, view-manager.test, single-valued.test*
+  - **la-gram and the workspace** have it with the next kernel archive; la-gram draws in that order and offers the
+    four after its 0.4.0.
 - **2026-11-25. On GitHub, with la-gram's test timeout.**
   - **Repository:** <https://github.com/linked-archi/kernel>, public, its history starting with la-gram's history
     of its files (la-gram's `.agents/tasks/github-move/`). `.github/workflows/kernel.yml` checks types, the unit

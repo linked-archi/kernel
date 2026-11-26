@@ -24,13 +24,19 @@ Provides vocabulary for diagram interchange (nodes, links, bounds) and visual st
 (colors, fonts, shapes, icons). Used both at the instance level (diagram elements) and
 at the type level (default notation for model concepts via NotationSet).'''@en ;
     dcterms:issued       "2019-03-17"^^xsd:date ;
-    dcterms:modified     "2026-11-20"^^xsd:date ;
+    dcterms:modified     "2026-11-26"^^xsd:date ;
     dcterms:publisher    <https://linked.archi> ;
     dcterms:publisher    "Linked.Archi"@en ;
     dcterms:title        "Core Linked.Archi Ontology for Diagrams and Visual Notation"@en ;
-    owl:versionInfo "0.9"@en ;
+    owl:versionInfo "0.10"@en ;
     rdfs:seeAlso    <https://meta.linked.archi/core-vis-shapes#> ;
-    skos:historyNote '''0.9: A diagram may hold a reference to another view. arch-vis:ViewReferenceNode is
+    skos:historyNote '''0.10: Which node is drawn above which. arch-vis:zOrder, an integer on a node, orders it
+among the nodes drawn in the same place — the view's top level, or inside the same container — the higher above
+the lower, the same in the order of their IRIs; absent, 0. A diagram's drawing order was nowhere in its data:
+a tool drew the nodes in whatever order it read them, so two overlapping nodes could swap after a save and a
+load, and the order a converted file gave its nodes was lost. What is nested stays above its container.
+
+0.9: A diagram may hold a reference to another view. arch-vis:ViewReferenceNode is
 the appearance of a view on another diagram, as an ArchNode is an element's: a node that opens the view
 its arch-vis:referencesView names, such as an index view's entry for each view it lists, or the way from
 an element's box to the view that details it. The ArchiMate exchange format writes one as a Label node
@@ -382,6 +388,22 @@ container's. Nesting is drawing: what it means in the model, if anything, is a r
 its own (see arch-vis:nestedEnd).'''@en ;
     rdfs:domain  arch-vis:Node ;
     rdfs:range   arch-vis:Node ;
+.
+
+arch-vis:zOrder
+    a            owl:DatatypeProperty,
+                 owl:FunctionalProperty ;
+    rdfs:label   "zOrder"@en ;
+    rdfs:comment '''Where a node is drawn among the nodes drawn in the same place — the view's top level, or
+inside the same container (arch-vis:inNode): above those with a lower zOrder, below those with a higher.
+Absent, it is 0. Nodes with the same zOrder are drawn in the order of their IRIs (by code point), the
+later above, so that every tool draws them alike. Only the order counts, not the numbers: bringing a node
+to the front gives it one more than the highest beside it, sending it to the back one less than the
+lowest. A nested node is drawn above its container, whatever either's zOrder; where lines go is the
+tool's. The ArchiMate exchange format draws a view's nodes in the order its file lists them, the last
+above: a converter keeps that order as zOrder.'''@en ;
+    rdfs:domain  arch-vis:Node ;
+    rdfs:range   xsd:integer ;
 .
 
 # Style

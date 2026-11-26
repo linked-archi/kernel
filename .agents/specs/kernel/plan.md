@@ -23,11 +23,17 @@ records web/desktop/CLI/browser checks and the API inventory. Shared modules are
 repositories. Updates are made here and delivered through a qualified archive and consumer lockfiles.
 The migration task retains explicit closure checks; E1/A remains open for the full metamodel matrix.
 
-## K01 qualification and remaining work
+## K01 qualification
 
-The source copy, typecheck, tests and packed 0.1.4 consumer checks have passed locally. The tarball from
-kernel `b96d741` matches the pin in both consumers, and an empty Vitest project loaded its RDF store and
-bundled assets. The [task log](tasks.md) records the evidence.
+The [history audit](../../tasks/import-from-la-gram/README.md) verifies the import of 98 la-gram commits.
+On `7f17a3a`, GitHub Actions and a clean local rehearsal passed dependency install, typecheck, 852 unit tests
+and package inspection. A clean consumer loaded the repacked archive and the W04 preview in separate installs.
+The [task log](tasks.md) records the artifact digests and the exact ArchiMate 3.2 asset difference.
 
-The original Git history and clean CI evidence are the remaining K01 items. Use the recorded pre-migration
-source reference for the [history import](../../tasks/import-from-la-gram/README.md).
+## K02 package and conformance
+
+The K02b candidate has an explicit package export map and a shared open/save/validation check in the kernel,
+workspace and modeller unit suites. It takes the committed ArchiMate 3.2 asset from kernel `7f17a3a`, which
+matches meta `9a8dd0b`. The [task log](tasks.md) records the exact packed dependency checked in both tools.
+Registry publication and qualification of the final released version require review of the candidate. Kotlin
+qualification and the wider Studio engine contract follow the local editor work.

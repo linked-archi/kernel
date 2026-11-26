@@ -167,6 +167,8 @@ export const IRI = {
   /** The view an `arch-vis:ViewReferenceNode` stands for and opens, as `archElement` names an ArchNode's element. */
   referencesView: VIS + 'referencesView',
   inNode: VIS + 'inNode',
+  /** A node's drawing order among the nodes in the same place, an integer; absent, 0 (core-vis 0.10). */
+  zOrder: VIS + 'zOrder',
   archRelationship: VIS + 'archRelationship',
   visSource: VIS + 'source',
   visTarget: VIS + 'target',

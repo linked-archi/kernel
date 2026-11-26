@@ -67,6 +67,11 @@ export interface NodeInfo {
   parentElementIri?: string;
   /** The node it is drawn inside — which of that element's placements, when it has several. */
   parentNodeIri?: string;
+  /**
+   * Its drawing order among the nodes drawn in the same place (`arch-vis:zOrder`, core-vis 0.10): above those with a
+   * lower one; absent, 0 — `drawing-order.ts`.
+   */
+  zOrder?: number;
   /** Set when the node stands for no model element. */
   figure?: FigureInfo;
   /** How an element's placement looks, from its own style; a figure's is in its {@link figure}. */
@@ -303,6 +308,8 @@ export interface ViewManager {
   addFigure?(viewIri: string, figure: FigureInfo & { bounds: Bounds; parentIri?: string }, iri?: string): string;
   /** A figure's text (`skos:prefLabel`), or none. */
   setFigureText?(viewIri: string, nodeIri: string, text: string | undefined): void;
+  /** A node's drawing order (`arch-vis:zOrder`, core-vis 0.10), by node IRI; 0 or `undefined` writes none. */
+  setNodeZOrder?(viewIri: string, nodeIri: string, zOrder: number | undefined): void;
   /**
    * The references to a view — the nodes that open it (`arch-vis:referencesView`) — in every view, each with the
    * view it is drawn in; by holder, then by node. A reference is its view's placement: wherever a concept's IRI keys

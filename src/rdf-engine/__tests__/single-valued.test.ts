@@ -25,6 +25,7 @@ describe('the built-in rules', () => {
   it('hold geometry, a link’s ends and list cells to one value, a name to one per language', () => {
     const rules = SingleValued.builtIn();
     expect(rules.limitOf(VIS + 'bounds-x', types())).toBe('one');
+    expect(rules.limitOf(VIS + 'zOrder', types())).toBe('one');
     expect(rules.limitOf(VIS + 'points', types())).toBe('one');
     expect(rules.limitOf(NAMESPACES.rdf + 'first', types())).toBe('one');
     expect(rules.limitOf(ARCH + 'target', types())).toBe('one');

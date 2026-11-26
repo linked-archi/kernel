@@ -3,8 +3,8 @@
  * (`ViewManager.duplicateView`) and paste (`clipboard.ts`) both do, in one place.
  *
  * Node by node: a figure is a figure; an element placed twice is placed twice (`another: true`), what was
- * inside a node inside its copy; each with its appearance, its appearances per presentation and its label
- * expressions. Then link by link, in passes — a link ending on another link waits for that one's copy: a
+ * inside a node inside its copy; each with its appearance, its appearances per presentation, its label
+ * expressions and its drawing order (core-vis 0.10). Then link by link, in passes — a link ending on another link waits for that one's copy: a
  * connector between the copied figures, a relationship between the copied placements of its ends, each with
  * its route, its looks and a name moved off its line. The source and the target may be different stores:
  * paste reads a copy's placements through a view manager over the copy and places them in the open view.
@@ -65,6 +65,7 @@ export function copyPlacements(
     if (node.appearance) target.setAppearance!(targetViewIri, copied, node.appearance);
     for (const [context, look] of Object.entries(node.contextAppearances ?? {})) target.setAppearance!(targetViewIri, copied, look, context);
     for (const label of node.labelExpressions ?? []) target.setLabelExpression!(targetViewIri, copied, label.context, label.expression);
+    if (node.zOrder) target.setNodeZOrder?.(targetViewIri, copied, node.zOrder);
   }
   for (const node of nodes) {
     const parent = node.parentNodeIri ? copies.get(node.parentNodeIri) : undefined;

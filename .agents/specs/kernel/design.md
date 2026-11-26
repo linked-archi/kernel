@@ -85,13 +85,14 @@ rewritten on the kernel's API.
   - **Answers K01's question** of where bundled metamodels ship.
 - **KD-4 Tests that need la-gram's application stay in la-gram.** The 14 above. Copying them would bring the
   application with them.
-- **KD-5 A provisional API until K02.**
+- **KD-5 Consumer entry points.**
   - **Entry points:** `.` exports each module as a namespace (`rdfEngine`, `metamodelManager`, `modelManager`,
     `modelIo`), so names the modules share do not clash. `./rdf-engine`, `./metamodel-manager` and
-    `./model-manager` export the modules' own `index.ts`. `./*.js` reaches any module file by its path.
-  - **Why so open:** that is what la-gram's migration needs, since la-gram imports module files directly.
-  - **K02** freezes the public API from what the workspace's inventory and fact sheet and la-gram actually call, and
-    narrows the exports to it.
+    `./model-manager` export their own `index.ts`. The K02b candidate names the module paths exercised by
+    the workspace, la-gram and Studio in `package.json#exports`, including previous barrel aliases and the
+    asset paths. `./conformance` provides the shared fixture check for each consumer's model I/O.
+  - Keep paths used by the shipped consumers. Adding a supported direct import also adds a package entry.
+    Asset copying and package identity continue to use the `./assets/*` and `./package.json` entries.
 
 ## Open questions
 
@@ -100,8 +101,7 @@ rewritten on the kernel's API.
 | A compiled build beside the source (KD-2) | K02, if a consumer needs one |
 | How the validation worker is created, so each bundler can build it: Vite needs `{ type: 'module' }` for a worker with ES imports | K02, with W02's first run |
 | The browser asset base as a setting (KD-3) | K02 |
-| The tool's identity in provenance, now la-gram's (`model-manager/provenance.ts`) | K02 |
-| Kernel-neutral names for the build flags `__LA_GRAM_ASSETS_VERSION__` and `__LA_GRAM_BUILD__` | K02 |
+| Explicit la-gram configuration for build identity, asset version and existing history database | la-gram migration follow-up. Retain compatibility defaults until the callers supply the equivalent values |
 
 ## KD-6 Neutral operations, consumer-owned sessions (2026-11-24)
 

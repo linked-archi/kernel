@@ -68,6 +68,8 @@ export const BUILT_IN_LIMITS: ReadonlyMap<string, ValueLimit> = new Map<string, 
     'bounds-y',
     'bounds-w',
     'bounds-h',
+    // A node's drawing order (core-vis 0.10): one, as its bounds are.
+    'zOrder',
     'point-x',
     'point-y',
     'archElement',

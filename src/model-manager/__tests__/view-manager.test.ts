@@ -155,6 +155,35 @@ describe('OxigraphViewManager', () => {
       ]);
     });
 
+    it('a node’s drawing order (arch-vis:zOrder, core-vis 0.10): an integer, none for 0, kept by a copy', () => {
+      const v = views.createView('Diagram', undefined, { modelIri }).value;
+      const a = elements.createElement(typeIri, modelIri).value;
+      const nodeIri = views.addElementToView(v, a, { x: 0, y: 0, width: 120, height: 55 });
+      const note = views.addFigure(v, { kind: 'note', text: 'Note', bounds: { x: 10, y: 10, width: 100, height: 40 } });
+
+      views.setNodeZOrder(v, nodeIri, 3);
+      views.setNodeZOrder(v, note, -2.7);
+      expect(store.getQuads(nn(nodeIri), nn(VIS + 'zOrder')).map((q) => [q.object.value, (q.object as { datatype?: { value: string } }).datatype?.value])).toEqual([
+        ['3', NAMESPACES.xsd + 'integer'],
+      ]);
+      expect(views.getNode(v, a)?.zOrder).toBe(3);
+      expect(views.getNodes(v).find((n) => n.nodeIri === note)?.zOrder).toBe(-2);
+
+      // A copy of the view draws them in the same order.
+      const copy = views.createView('Diagram', undefined, { modelIri }).value;
+      copyPlacements(views, v, views, copy);
+      expect(views.getNodes(copy).map((n) => n.zOrder).sort()).toEqual([-2, 3]);
+
+      // 0 is none: no value written, none read.
+      views.setNodeZOrder(v, nodeIri, 0);
+      views.setNodeZOrder(v, note, undefined);
+      expect(objects(store, nodeIri, VIS + 'zOrder')).toEqual([]);
+      expect(views.getNodes(v).some((n) => 'zOrder' in n)).toBe(false);
+      // Only a node of that view.
+      views.setNodeZOrder(copy, nodeIri, 5);
+      expect(objects(store, nodeIri, VIS + 'zOrder')).toEqual([]);
+    });
+
     it('nests a node inside another (arch-vis:inNode), un-nests it, and un-nests what a removed node held', () => {
       const v = views.createView('Diagram', undefined, { modelIri }).value;
       const [outer, inner] = [elements.createElement(typeIri, modelIri).value, elements.createElement(typeIri, modelIri).value];

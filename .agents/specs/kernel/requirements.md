@@ -56,6 +56,11 @@ that I can open and edit it in either tool and lose nothing.
 6. Creating a nested part records its parent, property, ownership and membership with a minted IRI. Editing
    requires exclusive ownership. Removing a shared, unknown or non-leaf part preserves its RDF and removes
    the chosen link. Safe leaf removal uses an exact quad set for undo.
+7. A node's drawing order is its `arch-vis:zOrder` (core-vis 0.10; linked-archi-meta's DD-45): read with the node,
+   written as an `xsd:integer`, none for 0, copied with the node, one value in a merge. Among the nodes drawn in the
+   same place the higher is drawn above, the same in IRI order. Bringing nodes to the front or the back, or one step
+   forward or backward, changes only the order between the nodes moved and those beside them: a step passes the next
+   node a node overlaps, and no other two nodes that overlap change places.
 
 ### Requirement 5: Change, diff and merge
 
